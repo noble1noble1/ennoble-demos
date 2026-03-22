@@ -78,6 +78,73 @@ function EditableInput({ value, onChange, label, prefix = "$" }: {
   );
 }
 
+function DonutChart({ income, expenses, mortgage }: { income: number; expenses: number; mortgage: number }) {
+  const total = expenses + mortgage;
+  const remaining = Math.max(income - total, 0);
+  const segments = [
+    { value: expenses, color: "#ff8800", label: "Expenses" },
+    { value: mortgage, color: "#ff4444", label: "Mortgage" },
+    { value: remaining, color: "#00ff88", label: "Cash Flow" },
+  ];
+
+  const radius = 40;
+  const strokeWidth = 10;
+  const circumference = 2 * Math.PI * radius;
+  const segmentTotal = segments.reduce((s, seg) => s + seg.value, 0);
+  let offset = 0;
+
+  return (
+    <div className="cashflow-donut-wrap">
+      <svg width="110" height="110" viewBox="0 0 110 110">
+        {/* Background track */}
+        <circle cx="55" cy="55" r={radius} fill="none" stroke="#1a1a1a" strokeWidth={strokeWidth} />
+        {segments.map((seg, i) => {
+          const segLen = segmentTotal > 0 ? (seg.value / segmentTotal) * circumference : 0;
+          const dashArray = `${segLen} ${circumference - segLen}`;
+          const dashOffset = -offset;
+          offset += segLen;
+          if (seg.value === 0) return null;
+          return (
+            <circle
+              key={i}
+              cx="55"
+              cy="55"
+              r={radius}
+              fill="none"
+              stroke={seg.color}
+              strokeWidth={strokeWidth}
+              strokeDasharray={dashArray}
+              strokeDashoffset={dashOffset}
+              strokeLinecap="butt"
+              transform="rotate(-90 55 55)"
+              className="cashflow-donut-segment"
+              style={{ filter: `drop-shadow(0 0 4px ${seg.color}40)` }}
+            />
+          );
+        })}
+        {/* Center text */}
+        <text x="55" y="52" textAnchor="middle" fill="white" fontSize="14" fontFamily="monospace" fontWeight="bold">
+          {segmentTotal > 0 ? Math.round((remaining / segmentTotal) * 100) : 0}%
+        </text>
+        <text x="55" y="65" textAnchor="middle" fill="#666" fontSize="8" fontFamily="monospace">
+          MARGIN
+        </text>
+      </svg>
+      <div className="cashflow-donut-legend">
+        {segments.map((seg) => (
+          <div key={seg.label} className="cashflow-legend-item">
+            <div className="cashflow-legend-dot" style={{ background: seg.color }} />
+            <span className="text-[9px] text-zinc-500 font-mono">{seg.label}</span>
+            <span className="text-[9px] font-mono ml-auto" style={{ color: seg.color }}>
+              ${seg.value.toLocaleString()}
+            </span>
+          </div>
+        ))}
+      </div>
+    </div>
+  );
+}
+
 export function CashFlowCalculator({ visible, loaded, propertyValue, monthlyRent }: CashFlowProps) {
   const [rent, setRent] = useState(monthlyRent);
   const [vacancy, setVacancy] = useState(5);
@@ -115,6 +182,13 @@ export function CashFlowCalculator({ visible, loaded, propertyValue, monthlyRent
         <ShimmerLoader lines={8} />
       ) : (
         <div className="cashflow-container">
+          {/* Donut Chart */}
+          <DonutChart
+            income={Math.round(effectiveRent)}
+            expenses={totalExpenses}
+            mortgage={mortgagePayment}
+          />
+
           {/* Income Section */}
           <div className="cashflow-section">
             <div className="cashflow-section-header">
