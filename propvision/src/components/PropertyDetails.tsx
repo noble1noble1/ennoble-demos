@@ -3,6 +3,7 @@
 import { Building2, Bed, Bath, Maximize, Calendar, TrendingUp, Home, Ruler } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
+import { AnimatedNumber } from "./ui/AnimatedNumber";
 import { PropertyData } from "@/lib/mockData";
 
 interface PropertyDetailsProps {
@@ -24,9 +25,6 @@ function StatItem({ icon, label, value }: { icon: React.ReactNode; label: string
 }
 
 export function PropertyDetails({ data, visible, loaded }: PropertyDetailsProps) {
-  const formatPrice = (n: number) =>
-    "$" + n.toLocaleString("en-US");
-
   const appreciation = ((data.estimatedValue - data.lastSoldPrice) / data.lastSoldPrice) * 100;
   const pricePerSqft = Math.round(data.estimatedValue / data.sqft);
 
@@ -55,16 +53,18 @@ export function PropertyDetails({ data, visible, loaded }: PropertyDetailsProps)
 
           <div className="flex items-baseline gap-3">
             <div className="text-2xl font-bold text-accent font-mono">
-              {formatPrice(data.estimatedValue)}
+              $<AnimatedNumber value={data.estimatedValue} duration={1200} />
             </div>
             <div className="flex items-center gap-1">
               <TrendingUp size={12} className="text-accent" />
-              <span className="text-xs text-accent font-mono font-semibold">+{appreciation.toFixed(1)}%</span>
+              <span className="text-xs text-accent font-mono font-semibold">
+                +<AnimatedNumber value={appreciation} decimals={1} duration={1200} />%
+              </span>
             </div>
           </div>
           <div className="flex items-center gap-3">
             <span className="text-[10px] text-zinc-600 font-mono">Est. Market Value</span>
-            <span className="text-[10px] text-zinc-600 font-mono">&bull; ${pricePerSqft}/sqft</span>
+            <span className="text-[10px] text-zinc-600 font-mono">&bull; $<AnimatedNumber value={pricePerSqft} />/sqft</span>
           </div>
 
           <div className="grid grid-cols-2 gap-2">
@@ -79,7 +79,7 @@ export function PropertyDetails({ data, visible, loaded }: PropertyDetailsProps)
           <div className="border-t border-zinc-800/50 pt-2.5 mt-1">
             <div className="flex justify-between text-[11px]">
               <span className="text-zinc-600">Last Sold: {data.lastSold}</span>
-              <span className="text-zinc-400 font-mono">{formatPrice(data.lastSoldPrice)}</span>
+              <span className="text-zinc-400 font-mono">${data.lastSoldPrice.toLocaleString()}</span>
             </div>
           </div>
         </div>
