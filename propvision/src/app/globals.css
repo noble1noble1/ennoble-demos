@@ -2785,6 +2785,13 @@ body {
   background: rgba(255,255,255,0.015);
   border-radius: 6px;
   border: 1px solid rgba(255,255,255,0.04);
+  transition: all 0.2s ease;
+  cursor: help;
+}
+
+.cashflow-metric:hover {
+  background: rgba(255,255,255,0.03);
+  border-color: rgba(255,255,255,0.08);
 }
 
 .cashflow-metric-label {
