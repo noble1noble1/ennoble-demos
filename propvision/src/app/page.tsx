@@ -11,6 +11,9 @@ import {
   FileDown,
   Share2,
   Check,
+  Building2,
+  Home as HomeIcon,
+  Hotel,
 } from "lucide-react";
 import { SearchBar } from "@/components/SearchBar";
 import { PropertyDetails } from "@/components/PropertyDetails";
@@ -36,6 +39,7 @@ import {
 
 export default function Home() {
   const [hasSearched, setHasSearched] = useState(false);
+  const [propertyType, setPropertyType] = useState<"condo" | "multi-family" | "single-family">("condo");
   const { visiblePanels, loadedPanels, sourceCount, currentSourceName, isSearching, triggerLoad } =
     useStaggeredLoad(10);
 
@@ -183,6 +187,26 @@ export default function Home() {
               AI-powered investment analysis. Real-time data from 14+ sources
               including MLS, public records, and neural search intelligence.
             </p>
+
+            {/* Property Type Selector */}
+            <div className="property-type-selector fade-up" role="radiogroup" aria-label="Property type">
+              {([
+                { key: "condo" as const, label: "Condo", icon: <Building2 size={14} /> },
+                { key: "multi-family" as const, label: "Multi-Family", icon: <Hotel size={14} /> },
+                { key: "single-family" as const, label: "Single Family", icon: <HomeIcon size={14} /> },
+              ]).map((pt) => (
+                <button
+                  key={pt.key}
+                  role="radio"
+                  aria-checked={propertyType === pt.key}
+                  className={`property-type-btn ${propertyType === pt.key ? "property-type-btn-active" : ""}`}
+                  onClick={() => setPropertyType(pt.key)}
+                >
+                  {pt.icon}
+                  {pt.label}
+                </button>
+              ))}
+            </div>
 
             <div className="fade-up" style={{ width: "100%", display: "flex", justifyContent: "center" }}>
               <SearchBar
