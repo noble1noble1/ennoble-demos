@@ -31,6 +31,26 @@ body {
   background: var(--background);
   color: var(--foreground);
   font-family: var(--font-sans, system-ui, -apple-system, sans-serif);
+  animation: pageFadeIn 0.5s ease-out;
+}
+
+@keyframes pageFadeIn {
+  from { opacity: 0; }
+  to { opacity: 1; }
+}
+
+/* ========== FOCUS INDICATORS ========== */
+*:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+
+button:focus-visible,
+a:focus-visible,
+input:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 2px;
 }
 
 /* ========== NOISE TEXTURE ========== */
@@ -752,6 +772,10 @@ body::after {
   color: white;
   margin-top: 2px;
   margin-bottom: 12px;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  max-width: 300px;
 }
 
 .overall-score-breakdown {
@@ -944,6 +968,10 @@ body::after {
   background: rgba(0, 255, 136, 0.04);
   border: 1px solid rgba(0, 255, 136, 0.1);
   border-radius: 6px;
+  max-width: 100%;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 /* ========== SCORE RING ========== */
@@ -1422,6 +1450,8 @@ body::after {
   width: 80px;
   flex-shrink: 0;
   overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 .comp-chart-bar-wrap {
