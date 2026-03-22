@@ -429,6 +429,63 @@ body {
   color: var(--accent);
 }
 
+/* ========== SEARCH AUTOCOMPLETE ========== */
+.search-bar-wrapper {
+  position: relative;
+}
+
+.search-suggestions {
+  position: absolute;
+  top: 100%;
+  left: 0;
+  right: 0;
+  max-width: 640px;
+  margin-top: 4px;
+  background: rgba(17, 17, 17, 0.98);
+  border: 1px solid #2a2a2a;
+  border-radius: 10px;
+  overflow: hidden;
+  z-index: 100;
+  backdrop-filter: blur(20px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255,255,255,0.03);
+  animation: suggestionsIn 0.15s ease-out;
+}
+
+@keyframes suggestionsIn {
+  from { opacity: 0; transform: translateY(-4px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+.search-suggestion-item {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  width: 100%;
+  padding: 10px 14px;
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  text-align: left;
+  font-size: 12px;
+  color: #aaa;
+  font-family: var(--font-mono, monospace);
+  transition: all 0.15s ease;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.search-suggestion-item:last-child {
+  border-bottom: none;
+}
+
+.search-suggestion-item:hover {
+  background: rgba(0, 255, 136, 0.06);
+  color: white;
+}
+
+.search-suggestion-item:hover svg {
+  color: var(--accent) !important;
+}
+
 /* ========== PROPERTY IMAGE HERO ========== */
 .property-image-hero {
   position: relative;
