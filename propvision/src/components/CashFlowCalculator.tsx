@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react";
 import { DollarSign, ChevronDown, ChevronUp } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
@@ -14,11 +14,12 @@ interface CashFlowProps {
 
 function AnimatedNumber({ value, prefix = "", suffix = "", decimals = 0 }: { value: number; prefix?: string; suffix?: string; decimals?: number }) {
   const [display, setDisplay] = useState(0);
+  const prevValueRef = useRef(0);
 
   useEffect(() => {
-    let start = 0;
+    const start = prevValueRef.current;
     const end = value;
-    const duration = 800;
+    const duration = 500;
     const startTime = Date.now();
 
     function tick() {
@@ -27,7 +28,11 @@ function AnimatedNumber({ value, prefix = "", suffix = "", decimals = 0 }: { val
       const eased = 1 - Math.pow(1 - progress, 3);
       const current = start + (end - start) * eased;
       setDisplay(current);
-      if (progress < 1) requestAnimationFrame(tick);
+      if (progress < 1) {
+        requestAnimationFrame(tick);
+      } else {
+        prevValueRef.current = end;
+      }
     }
 
     requestAnimationFrame(tick);
