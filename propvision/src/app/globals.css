@@ -894,6 +894,118 @@ body {
   transition: all 0.6s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* ========== COMPARE PROPERTIES ========== */
+.compare-container {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.compare-header-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  margin-bottom: 8px;
+}
+
+.compare-header {
+  flex: 1;
+  padding: 8px 10px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 6px;
+  min-width: 0;
+}
+
+.compare-header-subject {
+  background: rgba(0,255,136,0.03);
+}
+
+.compare-vs {
+  font-size: 9px;
+  font-family: var(--font-mono, monospace);
+  color: #555;
+  font-weight: 700;
+  padding: 0 8px;
+  flex-shrink: 0;
+}
+
+.compare-price-section {
+  padding: 8px 0;
+  border-bottom: 1px solid var(--card-border);
+  margin-bottom: 4px;
+}
+
+.compare-price-bar {
+  height: 24px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 4px;
+  margin-bottom: 4px;
+  overflow: hidden;
+}
+
+.compare-price-subject {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0,255,136,0.15), rgba(0,255,136,0.05));
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  transition: width 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+
+.compare-price-bar-comp {
+  margin-bottom: 6px;
+}
+
+.compare-price-comp {
+  height: 100%;
+  background: linear-gradient(90deg, rgba(0,204,255,0.15), rgba(0,204,255,0.05));
+  border-radius: 4px;
+  display: flex;
+  align-items: center;
+  padding-left: 8px;
+  transition: width 0.8s cubic-bezier(0.16,1,0.3,1);
+}
+
+.compare-price-diff {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  justify-content: center;
+  padding-top: 4px;
+}
+
+.compare-row {
+  display: flex;
+  align-items: center;
+  gap: 0;
+  padding: 6px 0;
+  border-bottom: 1px solid rgba(255,255,255,0.03);
+}
+
+.compare-cell {
+  flex: 1;
+  text-align: center;
+  padding: 4px 8px;
+  border-radius: 4px;
+  transition: background 0.3s ease;
+}
+
+.compare-cell-winner {
+  background: rgba(0,255,136,0.04);
+}
+
+.compare-label {
+  width: 80px;
+  text-align: center;
+  flex-shrink: 0;
+}
+
+.compare-footer {
+  padding-top: 8px;
+  text-align: center;
+}
+
 /* ========== SCORE CIRCLES ========== */
 .score-circle-bg {
   opacity: 0.15;

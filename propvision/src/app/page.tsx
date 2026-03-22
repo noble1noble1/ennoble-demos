@@ -24,6 +24,7 @@ import { RentGauge } from "@/components/RentGauge";
 import { MarketTrends } from "@/components/MarketTrends";
 import { Comparables } from "@/components/Comparables";
 import { NeighborhoodStats } from "@/components/NeighborhoodStats";
+import { CompareProperties } from "@/components/CompareProperties";
 import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
 import { ShimmerLoader } from "@/components/ui/ShimmerLoader";
 import { PanelCard } from "@/components/ui/PanelCard";
@@ -48,7 +49,7 @@ export default function Home() {
   const [hasSearched, setHasSearched] = useState(false);
   const [propertyType, setPropertyType] = useState<"condo" | "multi-family" | "single-family">("condo");
   const { visiblePanels, loadedPanels, sourceCount, currentSourceName, isSearching, triggerLoad } =
-    useStaggeredLoad(10);
+    useStaggeredLoad(11);
 
   const [copied, setCopied] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
@@ -369,37 +370,43 @@ export default function Home() {
               visible={visiblePanels[4]}
               loaded={loadedPanels[4]}
             />
-            <NeighborhoodStats
-              data={mockNeighborhood}
+            <CompareProperties
+              subject={mockProperty}
+              comp={mockComparables[0]}
               visible={visiblePanels[5]}
               loaded={loadedPanels[5]}
             />
-            <Suspense fallback={<PanelCard title="CASH FLOW CALCULATOR" visible={visiblePanels[6]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
+            <NeighborhoodStats
+              data={mockNeighborhood}
+              visible={visiblePanels[6]}
+              loaded={loadedPanels[6]}
+            />
+            <Suspense fallback={<PanelCard title="CASH FLOW CALCULATOR" visible={visiblePanels[7]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
               <CashFlowCalculator
-                visible={visiblePanels[6]}
-                loaded={loadedPanels[6]}
+                visible={visiblePanels[7]}
+                loaded={loadedPanels[7]}
                 propertyValue={mockProperty.estimatedValue}
                 monthlyRent={mockRentEstimate.mid}
               />
             </Suspense>
-            <Suspense fallback={<PanelCard title="RISK ASSESSMENT" visible={visiblePanels[7]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
+            <Suspense fallback={<PanelCard title="RISK ASSESSMENT" visible={visiblePanels[8]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
               <RiskScore
-                visible={visiblePanels[7]}
-                loaded={loadedPanels[7]}
-              />
-            </Suspense>
-            <Suspense fallback={<PanelCard title="AI INTELLIGENCE FEED" visible={visiblePanels[8]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
-              <IntelligenceFeed
-                data={mockIntelItems}
                 visible={visiblePanels[8]}
                 loaded={loadedPanels[8]}
               />
             </Suspense>
-            <Suspense fallback={<PanelCard title="AI INVESTMENT BRIEF" visible={visiblePanels[9]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
-              <InvestmentBrief
-                content={mockInvestmentBrief}
+            <Suspense fallback={<PanelCard title="AI INTELLIGENCE FEED" visible={visiblePanels[9]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
+              <IntelligenceFeed
+                data={mockIntelItems}
                 visible={visiblePanels[9]}
                 loaded={loadedPanels[9]}
+              />
+            </Suspense>
+            <Suspense fallback={<PanelCard title="AI INVESTMENT BRIEF" visible={visiblePanels[10]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
+              <InvestmentBrief
+                content={mockInvestmentBrief}
+                visible={visiblePanels[10]}
+                loaded={loadedPanels[10]}
               />
             </Suspense>
           </div>
