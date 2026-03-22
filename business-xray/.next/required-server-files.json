@@ -104,7 +104,7 @@
         "transform": "lodash/{{member}}"
       }
     },
-    "outputFileTracingRoot": "/Users/bron/ennoble-demos/propvision",
+    "outputFileTracingRoot": "/Users/bron/ennoble-demos",
     "cacheComponents": false,
     "cacheLife": {
       "default": {
@@ -304,11 +304,11 @@
     "bundlePagesRouterDependencies": false,
     "configFileName": "next.config.ts",
     "turbopack": {
-      "root": "/Users/bron/ennoble-demos/propvision"
+      "root": "/Users/bron/ennoble-demos"
     },
     "distDirRoot": ".next"
   },
-  "appDir": "/Users/bron/ennoble-demos/propvision/business-xray",
+  "appDir": "/Users/bron/ennoble-demos/business-xray",
   "relativeAppDir": "business-xray",
   "files": [
     ".next/routes-manifest.json",
