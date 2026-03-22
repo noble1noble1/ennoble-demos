@@ -59,18 +59,18 @@ function SpiderChart({ factors, animated }: { factors: RiskFactor[]; animated: b
   return (
     <svg viewBox="0 0 240 240" className="spider-chart">
       <defs>
-        <radialGradient id="spiderGlow" cx="50%" cy="50%" r="50%">
+        <radialGradient id="spider-glow" cx="50%" cy="50%" r="50%">
           <stop offset="0%" stopColor="#00ff88" stopOpacity="0.08" />
           <stop offset="100%" stopColor="#00ff88" stopOpacity="0" />
         </radialGradient>
-        <linearGradient id="spiderFill" x1="0" y1="0" x2="0" y2="1">
+        <linearGradient id="spider-fill" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#00ff88" stopOpacity="0.2" />
           <stop offset="100%" stopColor="#00ccff" stopOpacity="0.05" />
         </linearGradient>
       </defs>
 
       {/* Background glow */}
-      <circle cx={cx} cy={cy} r={maxR} fill="url(#spiderGlow)" />
+      <circle cx={cx} cy={cy} r={maxR} fill="url(#spider-glow)" />
 
       {/* Ring grid */}
       {rings.map((r, i) => (
@@ -102,7 +102,7 @@ function SpiderChart({ factors, animated }: { factors: RiskFactor[]; animated: b
       {/* Data polygon */}
       <polygon
         points={dataPolygon}
-        fill="url(#spiderFill)"
+        fill="url(#spider-fill)"
         stroke="#00ff88"
         strokeWidth="2"
         className="spider-data"

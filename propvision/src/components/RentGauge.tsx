@@ -69,7 +69,7 @@ export const RentGauge = memo(function RentGauge({ data, visible, loaded }: Rent
           <svg width="240" height="160" viewBox="0 0 240 160">
             {/* Glow filter */}
             <defs>
-              <filter id="glow">
+              <filter id="glow-gauge">
                 <feGaussianBlur stdDeviation="3" result="coloredBlur" />
                 <feMerge>
                   <feMergeNode in="coloredBlur" />
@@ -103,7 +103,7 @@ export const RentGauge = memo(function RentGauge({ data, visible, loaded }: Rent
               strokeWidth="20"
               strokeLinecap="round"
               opacity="0.5"
-              filter="url(#glow)"
+              filter="url(#glow-gauge)"
             />
             {/* High range */}
             <path
@@ -125,9 +125,9 @@ export const RentGauge = memo(function RentGauge({ data, visible, loaded }: Rent
               strokeWidth="2.5"
               strokeLinecap="round"
               className="gauge-needle"
-              filter="url(#glow)"
+              filter="url(#glow-gauge)"
             />
-            <circle cx={cx} cy={cy} r="6" fill="#00ff88" filter="url(#glow)" />
+            <circle cx={cx} cy={cy} r="6" fill="#00ff88" filter="url(#glow-gauge)" />
             <circle cx={cx} cy={cy} r="3" fill="#0a0a0a" />
 
             {/* Center value */}

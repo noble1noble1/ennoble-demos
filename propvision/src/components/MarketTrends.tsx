@@ -99,6 +99,8 @@ export const MarketTrends = memo(function MarketTrends({ data, visible, loaded }
                 key={p}
                 onClick={() => setPeriod(p)}
                 className="period-tab"
+                aria-label={`Show ${p.replace("Y", " year")} trend`}
+                aria-pressed={period === p}
                 style={{
                   color: period === p ? "var(--accent)" : "#555",
                   background: period === p ? "rgba(0,255,136,0.08)" : "transparent",
@@ -123,7 +125,7 @@ export const MarketTrends = memo(function MarketTrends({ data, visible, loaded }
                     <stop offset="50%" stopColor="#00ccff" stopOpacity={0.05} />
                     <stop offset="100%" stopColor="#00ccff" stopOpacity={0} />
                   </linearGradient>
-                  <filter id="glow">
+                  <filter id="glow-trends">
                     <feGaussianBlur stdDeviation="2" result="blur" />
                     <feMerge>
                       <feMergeNode in="blur" />
@@ -165,7 +167,7 @@ export const MarketTrends = memo(function MarketTrends({ data, visible, loaded }
                   strokeWidth={2.5}
                   fill="url(#valueGradient)"
                   dot={false}
-                  activeDot={{ r: 5, fill: "#00ff88", stroke: "#000", strokeWidth: 2, filter: "url(#glow)" }}
+                  activeDot={{ r: 5, fill: "#00ff88", stroke: "#000", strokeWidth: 2, filter: "url(#glow-trends)" }}
                   isAnimationActive={animate}
                   animationDuration={1500}
                   animationEasing="ease-out"
@@ -179,7 +181,7 @@ export const MarketTrends = memo(function MarketTrends({ data, visible, loaded }
                   fill="url(#rentGradient)"
                   dot={false}
                   strokeDasharray="6 3"
-                  activeDot={{ r: 5, fill: "#00ccff", stroke: "#000", strokeWidth: 2, filter: "url(#glow)" }}
+                  activeDot={{ r: 5, fill: "#00ccff", stroke: "#000", strokeWidth: 2, filter: "url(#glow-trends)" }}
                   isAnimationActive={animate}
                   animationDuration={1800}
                   animationEasing="ease-out"

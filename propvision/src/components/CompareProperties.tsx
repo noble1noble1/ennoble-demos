@@ -1,7 +1,7 @@
 "use client";
 
 import { memo } from "react";
-import { Columns2, TrendingUp, TrendingDown, Bed, Bath, Maximize, DollarSign } from "lucide-react";
+import { Columns2, TrendingUp, TrendingDown } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
 import { AnimatedNumber } from "./ui/AnimatedNumber";

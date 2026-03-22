@@ -192,12 +192,12 @@ export default function Home() {
               </div>
             )}
             <div className="hidden md:flex items-center gap-3">
-              <div className="status-indicator">
-                <div className="status-dot" />
+              <div className="status-indicator" aria-label="Scanner status: active">
+                <div className="status-dot" aria-hidden="true" />
                 SCANNER
               </div>
-              <div className="status-indicator">
-                <div className="status-dot" />
+              <div className="status-indicator" aria-label="Live data status: active">
+                <div className="status-dot" aria-hidden="true" />
                 LIVE
               </div>
             </div>

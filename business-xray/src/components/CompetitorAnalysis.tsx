@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Target, TrendingUp, TrendingDown } from "lucide-react";
+import { Target } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
 import { Competitor } from "@/lib/mockData";
@@ -64,7 +64,11 @@ export function CompetitorAnalysis({ data, subjectScore, visible, loaded }: Comp
                   key={comp.name}
                   className={`comp-chart-row comp-chart-row-clickable ${isSelected ? "comp-chart-row-selected" : ""}`}
                   style={{ animation: `fadeSlideIn 0.4s ease-out ${(i + 1) * 80}ms forwards`, opacity: 0 }}
+                  role="button"
+                  tabIndex={0}
+                  aria-label={`${comp.name}: score ${comp.overallScore}`}
                   onClick={() => setSelectedCompetitor(isSelected ? null : comp.name)}
+                  onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedCompetitor(isSelected ? null : comp.name); } }}
                 >
                   <div className="comp-chart-label">
                     <span className="text-[10px] font-mono text-zinc-400 truncate">{comp.name}</span>
@@ -96,7 +100,11 @@ export function CompetitorAnalysis({ data, subjectScore, visible, loaded }: Comp
                 key={comp.name}
                 className={`comp-detail-row ${selectedCompetitor === comp.name ? "comp-detail-row-selected" : ""}`}
                 style={{ animation: `fadeSlideIn 0.4s ease-out ${(i + 1) * 80 + 200}ms forwards`, opacity: 0 }}
+                role="button"
+                tabIndex={0}
+                aria-label={`Details for ${comp.name}`}
                 onClick={() => setSelectedCompetitor(selectedCompetitor === comp.name ? null : comp.name)}
+                onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") { e.preventDefault(); setSelectedCompetitor(selectedCompetitor === comp.name ? null : comp.name); } }}
               >
                 <div className="flex items-center justify-between">
                   <div className="text-[11px] text-zinc-400 font-medium">{comp.name}</div>
