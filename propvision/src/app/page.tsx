@@ -18,6 +18,8 @@ import { Comparables } from "@/components/Comparables";
 import { NeighborhoodStats } from "@/components/NeighborhoodStats";
 import { IntelligenceFeed } from "@/components/IntelligenceFeed";
 import { InvestmentBrief } from "@/components/InvestmentBrief";
+import { CashFlowCalculator } from "@/components/CashFlowCalculator";
+import { RiskScore } from "@/components/RiskScore";
 import { useStaggeredLoad } from "@/hooks/useStaggeredLoad";
 import {
   mockProperty,
@@ -32,7 +34,7 @@ import {
 export default function Home() {
   const [hasSearched, setHasSearched] = useState(false);
   const { visiblePanels, loadedPanels, sourceCount, isSearching, triggerLoad } =
-    useStaggeredLoad(8);
+    useStaggeredLoad(10);
 
   const handleSearch = useCallback(
     (_address: string) => {
@@ -253,15 +255,25 @@ export default function Home() {
               visible={visiblePanels[5]}
               loaded={loadedPanels[5]}
             />
-            <IntelligenceFeed
-              data={mockIntelItems}
+            <CashFlowCalculator
               visible={visiblePanels[6]}
               loaded={loadedPanels[6]}
+              propertyValue={mockProperty.estimatedValue}
+              monthlyRent={mockRentEstimate.mid}
+            />
+            <RiskScore
+              visible={visiblePanels[7]}
+              loaded={loadedPanels[7]}
+            />
+            <IntelligenceFeed
+              data={mockIntelItems}
+              visible={visiblePanels[8]}
+              loaded={loadedPanels[8]}
             />
             <InvestmentBrief
               content={mockInvestmentBrief}
-              visible={visiblePanels[7]}
-              loaded={loadedPanels[7]}
+              visible={visiblePanels[9]}
+              loaded={loadedPanels[9]}
             />
           </div>
         )}
