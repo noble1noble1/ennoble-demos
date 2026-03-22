@@ -64,6 +64,12 @@ export function Recommendations({ data, visible, loaded }: RecommendationsProps)
                     <div className="text-[12px] text-zinc-300 font-medium leading-tight">{rec.title}</div>
                     <div className="text-[10px] text-zinc-600 mt-1 leading-snug">{rec.description}</div>
                     <div className="flex items-center gap-3 mt-2">
+                      {rec.impact === "high" && rec.effort === "easy" && (
+                        <span className="rec-quickwin">
+                          <Zap size={8} />
+                          QUICK WIN
+                        </span>
+                      )}
                       <span
                         className="rec-badge"
                         style={{ color: impact.color, background: impact.bg, borderColor: impact.border }}

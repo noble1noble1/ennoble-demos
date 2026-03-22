@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Search } from "lucide-react";
+import { Search, Info } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
 import { SEOMetric } from "@/lib/mockData";
@@ -11,6 +11,19 @@ interface SEOScoreProps {
   visible: boolean;
   loaded: boolean;
 }
+
+const seoExplanations: Record<string, string> = {
+  "Title Tag": "The HTML <title> element shown in search results. Should be 50-60 characters with primary keywords.",
+  "Meta Description": "The summary shown below the title in search results. Should be 150-160 characters and compelling.",
+  "H1 Structure": "The main heading of the page. There should be exactly one H1 that describes the page content.",
+  "Mobile Friendly": "Whether the site renders well on mobile devices. Google uses mobile-first indexing.",
+  "Schema Markup": "Structured data (JSON-LD) that helps search engines understand page content for rich results.",
+  "Internal Links": "Links between pages on the same site. Helps distribute page authority and aids crawlability.",
+  "Image Alt Tags": "Descriptive text for images. Required for accessibility and helps with image search rankings.",
+  "Page Speed": "How fast the page loads. Core Web Vitals (LCP, CLS, INP) are Google ranking factors.",
+  "SSL Certificate": "HTTPS encryption. Required for security and is a confirmed Google ranking signal.",
+  "Sitemap": "An XML file listing all pages. Helps search engines discover and index content efficiently.",
+};
 
 function ScoreRing({ score, loaded }: { score: number; loaded: boolean }) {
   const radius = 40;
@@ -58,6 +71,7 @@ const statusColor = { good: "#00ff88", warning: "#ff8800", critical: "#ff4444" }
 
 export function SEOScore({ data, visible, loaded }: SEOScoreProps) {
   const avgScore = Math.round(data.reduce((s, m) => s + m.score, 0) / data.length);
+  const [hoveredMetric, setHoveredMetric] = useState<string | null>(null);
 
   return (
     <PanelCard
@@ -78,20 +92,31 @@ export function SEOScore({ data, visible, loaded }: SEOScoreProps) {
             {data.map((metric, i) => (
               <div
                 key={metric.label}
-                className="flex items-center gap-2"
+                className="seo-metric-row"
                 style={{ animation: `fadeSlideIn 0.3s ease-out ${i * 50}ms forwards`, opacity: 0 }}
+                onMouseEnter={() => setHoveredMetric(metric.label)}
+                onMouseLeave={() => setHoveredMetric(null)}
               >
-                <div
-                  className="w-1.5 h-1.5 rounded-full flex-shrink-0"
-                  style={{ background: statusColor[metric.status], boxShadow: `0 0 4px ${statusColor[metric.status]}40` }}
-                />
-                <span className="text-[11px] text-zinc-400 flex-1">{metric.label}</span>
-                <div className="w-16 metric-bar">
-                  <div className="metric-bar-fill" style={{ width: `${metric.score}%`, background: statusColor[metric.status] }} />
+                <div className="flex items-center gap-2">
+                  <div
+                    className="w-1.5 h-1.5 rounded-full flex-shrink-0"
+                    style={{ background: statusColor[metric.status], boxShadow: `0 0 4px ${statusColor[metric.status]}40` }}
+                  />
+                  <span className="text-[11px] text-zinc-400 flex-1">{metric.label}</span>
+                  <Info size={10} className="text-zinc-600 flex-shrink-0 seo-info-icon" />
+                  <div className="w-16 metric-bar">
+                    <div className="metric-bar-fill" style={{ width: `${metric.score}%`, background: statusColor[metric.status] }} />
+                  </div>
+                  <span className="text-[10px] font-mono w-8 text-right" style={{ color: statusColor[metric.status] }}>
+                    {metric.score}
+                  </span>
                 </div>
-                <span className="text-[10px] font-mono w-8 text-right" style={{ color: statusColor[metric.status] }}>
-                  {metric.score}
-                </span>
+                {hoveredMetric === metric.label && (
+                  <div className="seo-tooltip">
+                    <div className="text-[10px] text-zinc-300 mb-1">{seoExplanations[metric.label]}</div>
+                    <div className="text-[9px] text-zinc-500 font-mono">{metric.detail}</div>
+                  </div>
+                )}
               </div>
             ))}
           </div>

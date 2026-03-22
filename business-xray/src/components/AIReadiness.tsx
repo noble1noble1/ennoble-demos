@@ -13,8 +13,8 @@ interface AIReadinessProps {
 }
 
 function SpiderChart({ factors, animated }: { factors: AIReadinessMetric[]; animated: boolean }) {
-  const cx = 100;
-  const cy = 100;
+  const cx = 110;
+  const cy = 110;
   const maxR = 75;
   const rings = [0.25, 0.5, 0.75, 1.0];
   const n = factors.length;
@@ -34,7 +34,7 @@ function SpiderChart({ factors, animated }: { factors: AIReadinessMetric[]; anim
   const dataPolygon = dataPoints.map((p) => p.join(",")).join(" ");
 
   return (
-    <svg viewBox="0 0 200 200" className="w-full max-w-[200px]">
+    <svg viewBox="0 0 220 220" className="w-full max-w-[220px]">
       <defs>
         <linearGradient id="aiSpiderFill" x1="0" y1="0" x2="0" y2="1">
           <stop offset="0%" stopColor="#00ff88" stopOpacity="0.2" />
@@ -44,6 +44,9 @@ function SpiderChart({ factors, animated }: { factors: AIReadinessMetric[]; anim
       {rings.map((r, i) => (
         <polygon key={i} points={polygonPoints(r)} fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="1" />
       ))}
+      {/* Ring labels */}
+      <text x={cx + 4} y={cy - maxR * 0.5 + 3} fill="#333" fontSize="7" fontFamily="monospace">50</text>
+      <text x={cx + 4} y={cy - maxR + 3} fill="#333" fontSize="7" fontFamily="monospace">100</text>
       {factors.map((_, i) => {
         const [x, y] = getPoint(i, 1);
         return <line key={i} x1={cx} y1={cy} x2={x} y2={y} stroke="rgba(255,255,255,0.06)" strokeWidth="1" />;
@@ -60,12 +63,22 @@ function SpiderChart({ factors, animated }: { factors: AIReadinessMetric[]; anim
           style={{ filter: `drop-shadow(0 0 3px ${factors[i].color})`, transition: "all 1.2s cubic-bezier(0.4, 0, 0.2, 1) 0.3s" }}
         />
       ))}
+      {/* Labels positioned outside with score */}
       {factors.map((f, i) => {
-        const [x, y] = getPoint(i, 1.25);
+        const [x, y] = getPoint(i, 1.35);
+        const labelParts = f.label.split(" ");
+        const line1 = labelParts.slice(0, 2).join(" ");
+        const isLeft = x < cx;
+        const anchor = Math.abs(x - cx) < 10 ? "middle" : isLeft ? "end" : "start";
         return (
-          <text key={i} x={x} y={y} textAnchor="middle" dominantBaseline="middle" fill="#888" fontSize="8" fontFamily="monospace">
-            {f.label.split(" ").slice(0, 2).join(" ")}
-          </text>
+          <g key={i}>
+            <text x={x} y={y - 4} textAnchor={anchor} dominantBaseline="middle" fill="#888" fontSize="8" fontFamily="monospace">
+              {line1}
+            </text>
+            <text x={x} y={y + 6} textAnchor={anchor} dominantBaseline="middle" fill={f.color} fontSize="8" fontFamily="monospace" fontWeight="bold">
+              {f.score}
+            </text>
+          </g>
         );
       })}
     </svg>

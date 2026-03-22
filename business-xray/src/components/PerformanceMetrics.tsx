@@ -18,6 +18,12 @@ function getScoreColor(score: number): string {
   return "#ff4444";
 }
 
+function getCWVBadge(score: number): { label: string; color: string; bg: string; border: string } {
+  if (score >= 80) return { label: "Good", color: "#00ff88", bg: "rgba(0,255,136,0.08)", border: "rgba(0,255,136,0.2)" };
+  if (score >= 60) return { label: "Needs Work", color: "#ff8800", bg: "rgba(255,136,0,0.08)", border: "rgba(255,136,0,0.2)" };
+  return { label: "Poor", color: "#ff4444", bg: "rgba(255,68,68,0.08)", border: "rgba(255,68,68,0.2)" };
+}
+
 function SpeedGauge({ score, loaded }: { score: number; loaded: boolean }) {
   const [animated, setAnimated] = useState(false);
 
@@ -30,13 +36,12 @@ function SpeedGauge({ score, loaded }: { score: number; loaded: boolean }) {
   }, [loaded]);
 
   const color = getScoreColor(score);
-  // Arc from -135deg to +135deg (270 degrees total)
   const radius = 52;
   const cx = 65;
   const cy = 65;
-  const startAngle = -225; // start (left side)
-  const endAngle = 45; // end (right side)
-  const totalAngle = endAngle - startAngle; // 270
+  const startAngle = -225;
+  const endAngle = 45;
+  const totalAngle = endAngle - startAngle;
   const scoreAngle = startAngle + (score / 100) * totalAngle;
 
   const toRad = (deg: number) => (deg * Math.PI) / 180;
@@ -49,7 +54,6 @@ function SpeedGauge({ score, loaded }: { score: number; loaded: boolean }) {
     return `M ${x1} ${y1} A ${r} ${r} 0 ${largeArc} 1 ${x2} ${y2}`;
   };
 
-  // Needle endpoint
   const needleAngle = animated ? scoreAngle : startAngle;
   const needleX = cx + (radius - 8) * Math.cos(toRad(needleAngle));
   const needleY = cy + (radius - 8) * Math.sin(toRad(needleAngle));
@@ -57,9 +61,7 @@ function SpeedGauge({ score, loaded }: { score: number; loaded: boolean }) {
   return (
     <div className="flex flex-col items-center mb-2">
       <svg width="130" height="90" viewBox="0 0 130 90">
-        {/* Background arc */}
         <path d={arcPath(startAngle, endAngle, radius)} fill="none" stroke="#1a1a1a" strokeWidth="8" strokeLinecap="round" />
-        {/* Score arc */}
         <path
           d={arcPath(startAngle, animated ? scoreAngle : startAngle, radius)}
           fill="none"
@@ -71,7 +73,6 @@ function SpeedGauge({ score, loaded }: { score: number; loaded: boolean }) {
             filter: `drop-shadow(0 0 6px ${color}40)`,
           }}
         />
-        {/* Needle */}
         <line
           x1={cx}
           y1={cy}
@@ -83,7 +84,6 @@ function SpeedGauge({ score, loaded }: { score: number; loaded: boolean }) {
           style={{ transition: "all 1s cubic-bezier(0.16, 1, 0.3, 1)" }}
         />
         <circle cx={cx} cy={cy} r="3" fill="white" />
-        {/* Score text */}
         <text x={cx} y={cy - 10} textAnchor="middle" fill="white" fontSize="22" fontFamily="monospace" fontWeight="bold">
           {animated ? score : 0}
         </text>
@@ -119,11 +119,11 @@ export function PerformanceMetrics({ data, visible, loaded }: PerformanceProps) 
         <ShimmerLoader lines={6} />
       ) : (
         <div className="space-y-3">
-          {/* Speed Gauge */}
           <SpeedGauge score={avgScore} loaded={loaded} />
 
           {data.map((metric, i) => {
             const color = getScoreColor(metric.score);
+            const badge = getCWVBadge(metric.score);
             return (
               <div
                 key={metric.label}
@@ -132,6 +132,12 @@ export function PerformanceMetrics({ data, visible, loaded }: PerformanceProps) 
                 <div className="flex items-center justify-between mb-1">
                   <span className="text-[11px] text-zinc-400">{metric.label}</span>
                   <div className="flex items-center gap-2">
+                    <span
+                      className="cwv-badge"
+                      style={{ color: badge.color, background: badge.bg, borderColor: badge.border }}
+                    >
+                      {badge.label}
+                    </span>
                     <span className="text-[12px] font-mono font-bold" style={{ color }}>
                       {metric.value}{metric.unit}
                     </span>

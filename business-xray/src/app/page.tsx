@@ -349,6 +349,55 @@ export default function Home() {
               </div>
             )}
 
+            {/* Overall Score Hero */}
+            <div className="overall-score-hero">
+              <div className="overall-score-ring-wrap">
+                <svg width="120" height="120" viewBox="0 0 120 120">
+                  <circle cx="60" cy="60" r="50" fill="none" stroke="rgba(255,255,255,0.06)" strokeWidth="8" />
+                  <circle
+                    cx="60" cy="60" r="50" fill="none"
+                    stroke={mockScanResult.overallScore >= 80 ? "#00ff88" : mockScanResult.overallScore >= 60 ? "#ff8800" : "#ff4444"}
+                    strokeWidth="7" strokeLinecap="round"
+                    strokeDasharray={`${2 * Math.PI * 50}`}
+                    strokeDashoffset={`${2 * Math.PI * 50 * (1 - mockScanResult.overallScore / 100)}`}
+                    transform="rotate(-90 60 60)"
+                    className="overall-score-arc"
+                  />
+                  <text x="60" y="56" textAnchor="middle" fill="white" fontSize="32" fontFamily="monospace" fontWeight="bold">
+                    {mockScanResult.overallScore}
+                  </text>
+                  <text x="60" y="72" textAnchor="middle" fill="#666" fontSize="10" fontFamily="monospace">/100</text>
+                </svg>
+              </div>
+              <div className="overall-score-details">
+                <div className="overall-score-label">OVERALL SCORE</div>
+                <div className="overall-score-name">{mockScanResult.businessName}</div>
+                <div className="overall-score-breakdown">
+                  {[
+                    { label: "SEO", score: Math.round(mockScanResult.seoMetrics.reduce((s, m) => s + m.score, 0) / mockScanResult.seoMetrics.length) },
+                    { label: "Performance", score: Math.round(mockScanResult.performance.reduce((s, m) => s + m.score, 0) / mockScanResult.performance.length) },
+                    { label: "AI Ready", score: Math.round(mockScanResult.aiReadiness.reduce((s, m) => s + m.score, 0) / mockScanResult.aiReadiness.length) },
+                  ].map((item) => (
+                    <div key={item.label} className="overall-score-item">
+                      <span className="overall-score-item-label">{item.label}</span>
+                      <div className="overall-score-item-bar">
+                        <div
+                          className="overall-score-item-fill"
+                          style={{
+                            width: `${item.score}%`,
+                            background: item.score >= 80 ? "#00ff88" : item.score >= 60 ? "#ff8800" : "#ff4444",
+                          }}
+                        />
+                      </div>
+                      <span className="overall-score-item-value" style={{ color: item.score >= 80 ? "#00ff88" : item.score >= 60 ? "#ff8800" : "#ff4444" }}>
+                        {item.score}
+                      </span>
+                    </div>
+                  ))}
+                </div>
+              </div>
+            </div>
+
             <div className="dashboard-grid" role="region" aria-label="Business scan results">
               <TechStack
                 data={mockScanResult.techStack}
