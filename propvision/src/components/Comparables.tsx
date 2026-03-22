@@ -126,7 +126,6 @@ function CompCard({ comp, index }: { comp: ComparableProperty; index: number }) 
 }
 
 export const Comparables = memo(function Comparables({ data, visible, loaded }: ComparablesProps) {
-  const avgPrice = Math.round(data.reduce((s, c) => s + c.price, 0) / data.length);
   const avgPpsf = Math.round(data.reduce((s, c) => s + c.price / c.sqft, 0) / data.length);
   const avgDom = Math.round(
     data.filter((c) => c.daysOnMarket !== undefined).reduce((s, c) => s + (c.daysOnMarket ?? 0), 0) /
