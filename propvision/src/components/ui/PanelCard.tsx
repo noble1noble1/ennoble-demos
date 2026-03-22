@@ -16,7 +16,6 @@ export function PanelCard({
   title,
   icon,
   visible,
-  loaded,
   children,
   className = "",
   headerRight,

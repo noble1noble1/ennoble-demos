@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { Building2, Bed, Bath, Maximize, Calendar, TrendingUp, Home, Ruler, Car, DollarSign } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
@@ -24,7 +25,7 @@ function StatItem({ icon, label, value }: { icon: React.ReactNode; label: string
   );
 }
 
-export function PropertyDetails({ data, visible, loaded }: PropertyDetailsProps) {
+export const PropertyDetails = memo(function PropertyDetails({ data, visible, loaded }: PropertyDetailsProps) {
   const appreciation = ((data.estimatedValue - data.lastSoldPrice) / data.lastSoldPrice) * 100;
   const pricePerSqft = Math.round(data.estimatedValue / data.sqft);
 
@@ -114,4 +115,4 @@ export function PropertyDetails({ data, visible, loaded }: PropertyDetailsProps)
       )}
     </PanelCard>
   );
-}
+});

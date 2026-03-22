@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { DollarSign } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
@@ -11,7 +12,7 @@ interface RentGaugeProps {
   loaded: boolean;
 }
 
-export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
+export const RentGauge = memo(function RentGauge({ data, visible, loaded }: RentGaugeProps) {
   const { low, mid, high } = data;
   const min = low - 500;
   const max = high + 500;
@@ -186,4 +187,4 @@ export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
       )}
     </PanelCard>
   );
-}
+});
