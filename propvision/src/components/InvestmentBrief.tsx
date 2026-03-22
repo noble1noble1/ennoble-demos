@@ -102,14 +102,33 @@ export function InvestmentBrief({ content, visible, loaded }: InvestmentBriefPro
 
   const activeContent = getScenarioContent(content, scenario);
 
+  const userScrolledRef = useRef(false);
+
+  // Track if user has manually scrolled
+  useEffect(() => {
+    const container = containerRef.current;
+    if (!container) return;
+
+    function handleScroll() {
+      const { scrollTop, scrollHeight, clientHeight } = container!;
+      // User scrolled away from bottom
+      userScrolledRef.current = scrollHeight - scrollTop - clientHeight > 40;
+    }
+
+    container.addEventListener("scroll", handleScroll, { passive: true });
+    return () => container.removeEventListener("scroll", handleScroll);
+  }, [loaded]);
+
   useEffect(() => {
     if (!loaded) {
       setDisplayedText("");
       setIsTyping(false);
+      userScrolledRef.current = false;
       return;
     }
 
     setIsTyping(true);
+    userScrolledRef.current = false;
     let i = 0;
     const chunkSize = 4;
 
@@ -119,7 +138,8 @@ export function InvestmentBrief({ content, visible, loaded }: InvestmentBriefPro
         setDisplayedText(activeContent.slice(0, end));
         i = end;
 
-        if (containerRef.current) {
+        // Only auto-scroll if user hasn't manually scrolled away
+        if (containerRef.current && !userScrolledRef.current) {
           containerRef.current.scrollTop = containerRef.current.scrollHeight;
         }
       } else {

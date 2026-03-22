@@ -9,6 +9,7 @@ import {
   Zap,
   Globe,
   FileDown,
+  FileSpreadsheet,
   Share2,
   Check,
   Search,
@@ -137,7 +138,7 @@ export default function Home() {
               </div>
             )}
             {hasSearched && sourceCount >= 14 && (
-              <div className="flex items-center gap-2">
+              <div className="header-actions">
                 <button
                   className="action-btn action-btn-secondary"
                   onClick={handleNewAnalysis}
@@ -155,6 +156,15 @@ export default function Home() {
                 >
                   <FileDown size={14} />
                   <span className="hidden sm:inline">PDF Report</span>
+                </button>
+                <button
+                  className="action-btn action-btn-secondary"
+                  onClick={() => {}}
+                  aria-label="Export to CSV"
+                  title="Export to CSV"
+                >
+                  <FileSpreadsheet size={14} />
+                  <span className="hidden sm:inline">CSV</span>
                 </button>
                 <button
                   className="action-btn action-btn-secondary"

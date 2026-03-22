@@ -52,13 +52,15 @@ export const MarketTrends = memo(function MarketTrends({ data, visible, loaded }
   const [animate, setAnimate] = useState(false);
   const [period, setPeriod] = useState<Period>("5Y");
 
+  // Re-trigger animation on period change for smooth transitions
   useEffect(() => {
     if (loaded) {
-      const t = setTimeout(() => setAnimate(true), 100);
+      setAnimate(false);
+      const t = setTimeout(() => setAnimate(true), 50);
       return () => clearTimeout(t);
     }
     setAnimate(false);
-  }, [loaded]);
+  }, [loaded, period]);
 
   const filteredData = useMemo(() => {
     const count = periodQuarters[period];

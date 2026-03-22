@@ -154,6 +154,8 @@ body {
   padding: 6px 12px;
   border-radius: 6px;
   border: 1px solid rgba(0, 255, 136, 0.1);
+  animation: fadeSlideIn 0.3s ease-out;
+  transition: all 0.3s ease;
 }
 
 .source-counter-content {
@@ -257,6 +259,18 @@ body {
 }
 
 /* ========== ACTION BUTTONS ========== */
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  animation: headerActionsIn 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes headerActionsIn {
+  from { opacity: 0; transform: translateX(12px); }
+  to { opacity: 1; transform: translateX(0); }
+}
+
 .action-btn {
   display: flex;
   align-items: center;
@@ -2771,6 +2785,27 @@ body {
 
 .cashflow-metric-value.positive { color: var(--accent); }
 .cashflow-metric-value.negative { color: var(--danger); }
+
+.metric-hint {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  width: 11px;
+  height: 11px;
+  border-radius: 50%;
+  border: 1px solid #444;
+  font-size: 7px;
+  color: #555;
+  cursor: help;
+  margin-left: 2px;
+  transition: all 0.2s ease;
+  vertical-align: middle;
+}
+
+.cashflow-metric:hover .metric-hint {
+  border-color: var(--accent);
+  color: var(--accent);
+}
 
 /* ========== RISK SCORE ========== */
 .risk-container {

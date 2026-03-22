@@ -118,7 +118,10 @@ function DonutChart({ income, expenses, mortgage }: { income: number; expenses: 
               strokeLinecap="butt"
               transform="rotate(-90 55 55)"
               className="cashflow-donut-segment"
-              style={{ filter: `drop-shadow(0 0 4px ${seg.color}40)` }}
+              style={{
+                filter: `drop-shadow(0 0 4px ${seg.color}40)`,
+                transition: "stroke-dasharray 0.6s cubic-bezier(0.4, 0, 0.2, 1), stroke-dashoffset 0.6s cubic-bezier(0.4, 0, 0.2, 1)",
+              }}
             />
           );
         })}
@@ -254,26 +257,26 @@ export function CashFlowCalculator({ visible, loaded, propertyValue, monthlyRent
 
           {/* Key Metrics */}
           <div className="cashflow-metrics">
-            <div className="cashflow-metric">
-              <span className="cashflow-metric-label">NOI</span>
+            <div className="cashflow-metric" title="Net Operating Income: Annual rental income minus operating expenses (before mortgage)">
+              <span className="cashflow-metric-label">NOI <span className="metric-hint">?</span></span>
               <span className={`cashflow-metric-value ${annualNoi >= 0 ? "positive" : "negative"}`}>
                 <AnimatedNumber value={annualNoi} prefix="$" />/yr
               </span>
             </div>
-            <div className="cashflow-metric">
-              <span className="cashflow-metric-label">Cap Rate</span>
+            <div className="cashflow-metric" title="Capitalization Rate: NOI divided by property value. Higher = better return. 4-10% is typical for residential.">
+              <span className="cashflow-metric-label">Cap Rate <span className="metric-hint">?</span></span>
               <span className="cashflow-metric-value">
                 <AnimatedNumber value={capRate} decimals={2} suffix="%" />
               </span>
             </div>
-            <div className="cashflow-metric">
-              <span className="cashflow-metric-label">DSCR</span>
+            <div className="cashflow-metric" title="Debt Service Coverage Ratio: NOI divided by mortgage payment. Above 1.25x is considered healthy by lenders.">
+              <span className="cashflow-metric-label">DSCR <span className="metric-hint">?</span></span>
               <span className={`cashflow-metric-value ${dscr >= 1.25 ? "positive" : dscr >= 1.0 ? "" : "negative"}`}>
                 <AnimatedNumber value={dscr} decimals={2} suffix="x" />
               </span>
             </div>
-            <div className="cashflow-metric">
-              <span className="cashflow-metric-label">CoC Return</span>
+            <div className="cashflow-metric" title="Cash-on-Cash Return: Annual cash flow divided by total cash invested (down payment). Measures actual return on your out-of-pocket investment.">
+              <span className="cashflow-metric-label">CoC Return <span className="metric-hint">?</span></span>
               <span className={`cashflow-metric-value ${cashOnCash >= 0 ? "positive" : "negative"}`}>
                 <AnimatedNumber value={cashOnCash} decimals={1} suffix="%" />
               </span>

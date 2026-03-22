@@ -130,19 +130,24 @@ function SpiderChart({ factors, animated }: { factors: RiskFactor[]; animated: b
         />
       ))}
 
-      {/* Labels */}
+      {/* Labels - pushed further out on small viewboxes and responsive font */}
       {factors.map((f, i) => {
-        const [x, y] = getPoint(i, 1.22);
+        const [x, y] = getPoint(i, 1.28);
+        // Adjust text anchor based on position to avoid overlap
+        const angle = startAngle + i * angleStep;
+        const cos = Math.cos(angle);
+        const anchor = cos < -0.3 ? "end" : cos > 0.3 ? "start" : "middle";
         return (
           <text
             key={i}
             x={x}
             y={y}
-            textAnchor="middle"
+            textAnchor={anchor}
             dominantBaseline="middle"
             fill="#888"
-            fontSize="10"
+            fontSize="9"
             fontFamily="monospace"
+            className="spider-label"
           >
             {f.label}
           </text>
