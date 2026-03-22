@@ -14,6 +14,8 @@ import {
   Building2,
   Home as HomeIcon,
   Hotel,
+  Sparkles,
+  Info,
 } from "lucide-react";
 import { SearchBar } from "@/components/SearchBar";
 import { PropertyDetails } from "@/components/PropertyDetails";
@@ -49,6 +51,16 @@ export default function Home() {
     useStaggeredLoad(10);
 
   const [copied, setCopied] = useState(false);
+  const [showHowItWorks, setShowHowItWorks] = useState(false);
+
+  const analysisTimestamp = new Date().toLocaleString("en-US", {
+    month: "long",
+    day: "numeric",
+    year: "numeric",
+    hour: "numeric",
+    minute: "2-digit",
+    hour12: true,
+  });
 
   const handleSearch = useCallback(
     (_address: string) => {
@@ -296,6 +308,40 @@ export default function Home() {
           </div>
         ) : (
           <ErrorBoundary fallbackTitle="Dashboard failed to load">
+          {/* AI Badge & Timestamp Bar */}
+          {sourceCount >= 14 && (
+            <div className="analysis-meta-bar">
+              <div className="ai-badge">
+                <Sparkles size={12} />
+                AI-Generated Analysis
+              </div>
+              <span className="analysis-timestamp">
+                Analysis generated {analysisTimestamp}
+              </span>
+              <button
+                className="how-it-works-btn"
+                onClick={() => setShowHowItWorks(!showHowItWorks)}
+                aria-expanded={showHowItWorks}
+                aria-label="How it works"
+              >
+                <Info size={12} />
+                How it works
+              </button>
+              {showHowItWorks && (
+                <div className="how-it-works-tooltip">
+                  <div className="how-it-works-title">Data Sources & Methodology</div>
+                  <p>PropVision aggregates data from 14+ sources in real-time:</p>
+                  <ul>
+                    <li><strong>Valuation:</strong> MLS listings, public deed records, county assessor data</li>
+                    <li><strong>Rental:</strong> RentCast API, Zillow Rental Index, lease comps</li>
+                    <li><strong>Market Intel:</strong> Exa neural search, news feeds, permit filings</li>
+                    <li><strong>Neighborhood:</strong> Census ACS, Walk Score, NYPD CompStat, GreatSchools</li>
+                    <li><strong>AI Brief:</strong> Claude AI synthesizes all sources into actionable insights</li>
+                  </ul>
+                </div>
+              )}
+            </div>
+          )}
           <div className="dashboard-grid" role="region" aria-label="Property analysis dashboard">
             <PropertyDetails
               data={mockProperty}
@@ -363,8 +409,33 @@ export default function Home() {
 
       {/* Footer */}
       <footer className="app-footer relative z-10" role="contentinfo">
-        Powered by <span>Exa Neural Search</span> &bull;{" "}
-        <span>Claude AI</span> &bull; <span>RentCast</span>
+        <div className="footer-inner">
+          <div className="footer-brand">
+            <span className="footer-logo">PROPVISION</span>
+            <span className="footer-tagline">AI Investment Intelligence</span>
+          </div>
+          <div className="footer-powered">
+            <span className="footer-label">POWERED BY</span>
+            <div className="footer-sources">
+              <span className="footer-source">Exa Neural Search</span>
+              <span className="footer-dot" />
+              <span className="footer-source">Claude AI</span>
+              <span className="footer-dot" />
+              <span className="footer-source">RentCast</span>
+              <span className="footer-dot" />
+              <span className="footer-source">Walk Score</span>
+            </div>
+          </div>
+          <div className="footer-meta">
+            <span className="footer-version">v2.4.0</span>
+            <span className="footer-separator">|</span>
+            <span className="footer-status">
+              <span className="footer-status-dot" />
+              All Systems Operational
+            </span>
+          </div>
+        </div>
+        <div className="footer-gradient" />
       </footer>
     </div>
   );

@@ -84,9 +84,9 @@ export const MarketTrends = memo(function MarketTrends({ data, visible, loaded }
                     <stop offset="100%" stopColor="#00ff88" stopOpacity={0} />
                   </linearGradient>
                   <linearGradient id="rentGradient" x1="0" y1="0" x2="0" y2="1">
-                    <stop offset="0%" stopColor="#00aaff" stopOpacity={0.2} />
-                    <stop offset="50%" stopColor="#00aaff" stopOpacity={0.05} />
-                    <stop offset="100%" stopColor="#00aaff" stopOpacity={0} />
+                    <stop offset="0%" stopColor="#00ccff" stopOpacity={0.2} />
+                    <stop offset="50%" stopColor="#00ccff" stopOpacity={0.05} />
+                    <stop offset="100%" stopColor="#00ccff" stopOpacity={0} />
                   </linearGradient>
                   <filter id="glow">
                     <feGaussianBlur stdDeviation="2" result="blur" />
@@ -139,12 +139,12 @@ export const MarketTrends = memo(function MarketTrends({ data, visible, loaded }
                   yAxisId="rent"
                   type="monotone"
                   dataKey="rent"
-                  stroke="#00aaff"
+                  stroke="#00ccff"
                   strokeWidth={2}
                   fill="url(#rentGradient)"
                   dot={false}
                   strokeDasharray="6 3"
-                  activeDot={{ r: 5, fill: "#00aaff", stroke: "#000", strokeWidth: 2, filter: "url(#glow)" }}
+                  activeDot={{ r: 5, fill: "#00ccff", stroke: "#000", strokeWidth: 2, filter: "url(#glow)" }}
                   isAnimationActive={animate}
                   animationDuration={1800}
                   animationEasing="ease-out"
@@ -158,7 +158,7 @@ export const MarketTrends = memo(function MarketTrends({ data, visible, loaded }
               <span className="text-zinc-500">Property Value</span>
             </div>
             <div className="flex items-center gap-2">
-              <div className="w-4 h-[3px] rounded-full bg-[#00aaff] opacity-80" style={{ backgroundImage: "repeating-linear-gradient(90deg, #00aaff 0px, #00aaff 4px, transparent 4px, transparent 7px)" }} />
+              <div className="w-4 h-[3px] rounded-full bg-[#00ccff] opacity-80" style={{ backgroundImage: "repeating-linear-gradient(90deg, #00ccff 0px, #00ccff 4px, transparent 4px, transparent 7px)" }} />
               <span className="text-zinc-500">Rental Rate</span>
             </div>
           </div>

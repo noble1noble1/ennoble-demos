@@ -129,7 +129,7 @@ export const NeighborhoodStats = memo(function NeighborhoodStats({ data, visible
         <div className="space-y-4">
           <div className="flex justify-around">
             <CircleScore score={data.walkScore} label="WALK" color="#00ff88" loaded={loaded} />
-            <CircleScore score={data.transitScore} label="TRANSIT" color="#00aaff" loaded={loaded} />
+            <CircleScore score={data.transitScore} label="TRANSIT" color="#00ccff" loaded={loaded} />
             <CircleScore score={data.bikeScore} label="BIKE" color="#ff8800" loaded={loaded} />
           </div>
 

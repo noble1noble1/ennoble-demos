@@ -33,6 +33,11 @@ function StaticMapPlaceholder({ property, comparables }: { property: PropertyDat
       <div className="map-range-ring ring-2" />
       <div className="map-range-ring ring-3" />
 
+      {/* Distance labels */}
+      <div className="map-distance-label" style={{ top: "50%", left: "calc(50% + 50px)" }}>0.1mi</div>
+      <div className="map-distance-label" style={{ top: "50%", left: "calc(50% + 90px)" }}>0.3mi</div>
+      <div className="map-distance-label" style={{ top: "50%", left: "calc(50% + 130px)" }}>0.5mi</div>
+
       {/* Comparable dots */}
       {comparables.map((comp, i) => {
         const dx = (comp.coordinates[0] - lng) * 8000;
