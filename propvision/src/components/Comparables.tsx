@@ -1,6 +1,6 @@
 "use client";
 
-import { LayoutGrid, Bed, Bath, Maximize, Calendar, Clock, TrendingUp, TrendingDown } from "lucide-react";
+import { LayoutGrid, Bed, Bath, Maximize, Calendar, Clock, TrendingUp, TrendingDown, Image } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
 import { ComparableProperty, mockProperty } from "@/lib/mockData";
@@ -39,6 +39,9 @@ function CompCard({ comp, index }: { comp: ComparableProperty; index: number }) 
         <div className="comp-image-gradient" />
         <div className="comp-image-placeholder">
           <LayoutGrid size={16} className="text-zinc-600" />
+          <span className="flex items-center gap-1 text-[8px] text-zinc-600 mt-1 font-mono">
+            <Image size={8} /> {comp.photoCount} photos
+          </span>
         </div>
         <div className="comp-distance">{comp.distance}</div>
         {comp.daysOnMarket !== undefined && (
@@ -47,6 +50,9 @@ function CompCard({ comp, index }: { comp: ComparableProperty; index: number }) 
             {comp.daysOnMarket}d · {getDomLabel(comp.daysOnMarket)}
           </div>
         )}
+        <div className={`comp-status-badge comp-status-${comp.listingStatus.toLowerCase()}`}>
+          {comp.listingStatus}
+        </div>
       </div>
 
       <div className="p-3 space-y-2">

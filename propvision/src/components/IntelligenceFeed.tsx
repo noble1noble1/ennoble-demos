@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Radar, ExternalLink, AlertTriangle, TrendingUp, Building, Shield } from "lucide-react";
+import { Radar, ExternalLink, AlertTriangle, TrendingUp, Building, Shield, MapPin, GraduationCap, Hammer, Briefcase, ShoppingBag } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
 import { IntelItem } from "@/lib/mockData";
@@ -19,9 +19,18 @@ function getRelevanceColor(r: number): string {
   return "#666";
 }
 
-function getIcon(index: number) {
-  const icons = [TrendingUp, Building, Shield, Building, TrendingUp, AlertTriangle, Building, AlertTriangle];
-  const Icon = icons[index % icons.length];
+function getCategoryIcon(category: string) {
+  const iconMap: Record<string, React.ComponentType<{ size: number }>> = {
+    zoning: MapPin,
+    infrastructure: Building,
+    market: TrendingUp,
+    schools: GraduationCap,
+    permits: Hammer,
+    employment: Briefcase,
+    safety: Shield,
+    amenities: ShoppingBag,
+  };
+  const Icon = iconMap[category] || AlertTriangle;
   return <Icon size={10} />;
 }
 
@@ -49,7 +58,7 @@ function FeedItem({ item, index }: { item: IntelItem; index: number }) {
 
         <div className="flex-1 min-w-0">
           <div className="flex items-start gap-1.5 mb-1">
-            <span className="text-zinc-600 mt-0.5">{getIcon(index)}</span>
+            <span className="text-zinc-600 mt-0.5">{getCategoryIcon(item.category)}</span>
             <p className="text-[13px] text-zinc-300 leading-snug">{item.text}</p>
           </div>
           <div className="flex items-center gap-3 mt-2">

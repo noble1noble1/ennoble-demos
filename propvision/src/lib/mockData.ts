@@ -1,3 +1,10 @@
+export interface TaxHistoryEntry {
+  year: number;
+  assessed: number;
+  tax: number;
+  change: number;
+}
+
 export interface PropertyData {
   address: string;
   city: string;
@@ -13,6 +20,10 @@ export interface PropertyData {
   lastSold: string;
   lastSoldPrice: number;
   coordinates: [number, number];
+  hoaFee: number;
+  parking: string;
+  amenities: string[];
+  taxHistory: TaxHistoryEntry[];
 }
 
 export interface ComparableProperty {
@@ -27,6 +38,8 @@ export interface ComparableProperty {
   soldDate?: string;
   daysOnMarket?: number;
   condition?: string;
+  listingStatus: "Sold" | "Active" | "Pending";
+  photoCount: number;
 }
 
 export interface RentEstimate {
@@ -58,6 +71,7 @@ export interface IntelItem {
   source: string;
   timestamp: string;
   relevance: number;
+  category: "zoning" | "infrastructure" | "market" | "schools" | "permits" | "employment" | "safety" | "amenities";
 }
 
 export const mockProperty: PropertyData = {
@@ -75,6 +89,29 @@ export const mockProperty: PropertyData = {
   lastSold: "2021-06-15",
   lastSoldPrice: 1150000,
   coordinates: [-73.9857, 40.7484],
+  hoaFee: 1245,
+  parking: "1 Deeded Garage Space",
+  amenities: [
+    "24/7 Doorman",
+    "Concierge",
+    "Fitness Center",
+    "Rooftop Terrace",
+    "Residents Lounge",
+    "Package Room",
+    "Bike Storage",
+    "Pet Spa",
+    "Children's Playroom",
+    "Cold Storage",
+  ],
+  taxHistory: [
+    { year: 2024, assessed: 1260000, tax: 18144, change: 3.2 },
+    { year: 2023, assessed: 1220000, tax: 17568, change: 2.8 },
+    { year: 2022, assessed: 1187000, tax: 17093, change: 4.5 },
+    { year: 2021, assessed: 1136000, tax: 16358, change: 1.2 },
+    { year: 2020, assessed: 1122000, tax: 16157, change: -0.8 },
+    { year: 2019, assessed: 1131000, tax: 16286, change: 5.1 },
+    { year: 2018, assessed: 1076000, tax: 15494, change: 0 },
+  ],
 };
 
 export const mockComparables: ComparableProperty[] = [
@@ -90,6 +127,8 @@ export const mockComparables: ComparableProperty[] = [
     soldDate: "Jan 2025",
     daysOnMarket: 18,
     condition: "Excellent",
+    listingStatus: "Sold",
+    photoCount: 24,
   },
   {
     address: "15 W 34th St, Unit 8A",
@@ -103,6 +142,8 @@ export const mockComparables: ComparableProperty[] = [
     soldDate: "Dec 2024",
     daysOnMarket: 34,
     condition: "Good",
+    listingStatus: "Sold",
+    photoCount: 18,
   },
   {
     address: "11 W 30th St, Apt 5C",
@@ -116,6 +157,8 @@ export const mockComparables: ComparableProperty[] = [
     soldDate: "Feb 2025",
     daysOnMarket: 8,
     condition: "Excellent",
+    listingStatus: "Sold",
+    photoCount: 31,
   },
   {
     address: "400 Park Ave S, Unit 22D",
@@ -126,9 +169,10 @@ export const mockComparables: ComparableProperty[] = [
     distance: "0.4 mi",
     coordinates: [-73.9832, 40.7445],
     image: "/placeholder-4.jpg",
-    soldDate: "Nov 2024",
-    daysOnMarket: 45,
-    condition: "Good",
+    daysOnMarket: 12,
+    condition: "Excellent",
+    listingStatus: "Active",
+    photoCount: 28,
   },
   {
     address: "225 W 34th St, Apt 3F",
@@ -139,9 +183,10 @@ export const mockComparables: ComparableProperty[] = [
     distance: "0.5 mi",
     coordinates: [-73.9905, 40.7510],
     image: "/placeholder-5.jpg",
-    soldDate: "Oct 2024",
-    daysOnMarket: 62,
+    daysOnMarket: 45,
     condition: "Fair",
+    listingStatus: "Pending",
+    photoCount: 12,
   },
   {
     address: "45 W 36th St, Unit 10A",
@@ -155,6 +200,8 @@ export const mockComparables: ComparableProperty[] = [
     soldDate: "Jan 2025",
     daysOnMarket: 12,
     condition: "Excellent",
+    listingStatus: "Sold",
+    photoCount: 36,
   },
 ];
 
@@ -164,7 +211,28 @@ export const mockRentEstimate: RentEstimate = {
   high: 5200,
 };
 
+// 10 years of market data (2015-2024)
 export const mockMarketData: MarketDataPoint[] = [
+  { year: "2015", value: 720000, rent: 2400 },
+  { year: "2015 Q2", value: 735000, rent: 2450 },
+  { year: "2015 Q3", value: 745000, rent: 2480 },
+  { year: "2015 Q4", value: 755000, rent: 2520 },
+  { year: "2016", value: 770000, rent: 2550 },
+  { year: "2016 Q2", value: 785000, rent: 2600 },
+  { year: "2016 Q3", value: 800000, rent: 2650 },
+  { year: "2016 Q4", value: 815000, rent: 2700 },
+  { year: "2017", value: 840000, rent: 2780 },
+  { year: "2017 Q2", value: 860000, rent: 2850 },
+  { year: "2017 Q3", value: 875000, rent: 2900 },
+  { year: "2017 Q4", value: 890000, rent: 2950 },
+  { year: "2018", value: 910000, rent: 3000 },
+  { year: "2018 Q2", value: 935000, rent: 3100 },
+  { year: "2018 Q3", value: 950000, rent: 3150 },
+  { year: "2018 Q4", value: 965000, rent: 3200 },
+  { year: "2019", value: 975000, rent: 3300 },
+  { year: "2019 Q2", value: 985000, rent: 3350 },
+  { year: "2019 Q3", value: 990000, rent: 3380 },
+  { year: "2019 Q4", value: 992000, rent: 3400 },
   { year: "2020", value: 985000, rent: 3400 },
   { year: "2020 Q2", value: 945000, rent: 3200 },
   { year: "2020 Q3", value: 960000, rent: 3250 },
@@ -205,6 +273,7 @@ export const mockIntelItems: IntelItem[] = [
     source: "NYC Planning Commission",
     timestamp: "2 min ago",
     relevance: 94,
+    category: "permits",
   },
   {
     id: 2,
@@ -212,6 +281,7 @@ export const mockIntelItems: IntelItem[] = [
     source: "Metropolitan Transit Authority",
     timestamp: "5 min ago",
     relevance: 91,
+    category: "infrastructure",
   },
   {
     id: 3,
@@ -219,6 +289,7 @@ export const mockIntelItems: IntelItem[] = [
     source: "NYPD CompStat",
     timestamp: "8 min ago",
     relevance: 87,
+    category: "safety",
   },
   {
     id: 4,
@@ -226,6 +297,7 @@ export const mockIntelItems: IntelItem[] = [
     source: "Commercial Observer",
     timestamp: "12 min ago",
     relevance: 85,
+    category: "employment",
   },
   {
     id: 5,
@@ -233,6 +305,7 @@ export const mockIntelItems: IntelItem[] = [
     source: "StreetEasy Market Report",
     timestamp: "15 min ago",
     relevance: 82,
+    category: "market",
   },
   {
     id: 6,
@@ -240,20 +313,55 @@ export const mockIntelItems: IntelItem[] = [
     source: "NYC Dept of City Planning",
     timestamp: "18 min ago",
     relevance: 79,
+    category: "zoning",
   },
   {
     id: 7,
+    text: "PS 116 Mary Lindley Murray rated 8/10 by GreatSchools — reading proficiency up 6% from prior year",
+    source: "GreatSchools.org",
+    timestamp: "20 min ago",
+    relevance: 78,
+    category: "schools",
+  },
+  {
+    id: 8,
     text: "New Whole Foods Market confirmed for 6th Avenue location — neighborhood retail amenities expanding",
     source: "Crain's New York Business",
     timestamp: "22 min ago",
     relevance: 75,
+    category: "amenities",
   },
   {
-    id: 8,
+    id: 9,
+    text: "Building permit filed: 28-story mixed-use tower at 355 W 35th St — 412 units, retail podium, community facility",
+    source: "NYC Buildings Dept",
+    timestamp: "24 min ago",
+    relevance: 74,
+    category: "permits",
+  },
+  {
+    id: 10,
     text: "Property tax assessment appeal window opens March 1 — potential 8-12% reduction for comparable units",
     source: "NYC Finance Dept",
     timestamp: "25 min ago",
     relevance: 72,
+    category: "market",
+  },
+  {
+    id: 11,
+    text: "Midtown South office-to-residential conversion pipeline reaches 2.1M sqft — largest in city history",
+    source: "Real Capital Analytics",
+    timestamp: "28 min ago",
+    relevance: 70,
+    category: "zoning",
+  },
+  {
+    id: 12,
+    text: "Con Edison completing $180M grid modernization for Midtown — improved reliability, EV charging infrastructure",
+    source: "Con Edison",
+    timestamp: "32 min ago",
+    relevance: 68,
+    category: "infrastructure",
   },
 ];
 
@@ -266,6 +374,61 @@ The subject property at 350 Fifth Avenue, New York, NY 10118 represents a compel
 The Midtown Manhattan market continues to demonstrate resilience, with median condo prices rising 4.2% year-over-year. Key demand drivers include proximity to Penn Station (undergoing $3.2B renovation), expanding tech sector employment, and limited new inventory in established buildings.
 
 Current rental rates for comparable units range from $3,800 to $5,200/month, with a median estimate of $4,500/month. This translates to a gross rental yield of approximately 4.24%, above the Manhattan average of 3.8%.
+
+Over the trailing 10-year period, the property has appreciated 77.1% from its 2015 baseline of $720,000, representing a compound annual growth rate (CAGR) of 5.9%.
+
+## Debt Service Coverage Analysis
+
+Assuming 80% LTV at 6.5% fixed rate (30-year amortization):
+
+| Metric | Monthly | Annual |
+|--------|---------|--------|
+| Gross Rental Income | $4,500 | $54,000 |
+| Effective Income (5% vacancy) | $4,275 | $51,300 |
+| Operating Expenses | -$1,833 | -$21,996 |
+| Net Operating Income | $2,442 | $29,304 |
+| Mortgage Payment | -$6,449 | -$77,388 |
+| Cash Flow | -$4,007 | -$48,084 |
+
+**DSCR: 0.38x** — Property does not self-service debt at current leverage. Recommend reducing LTV to 50-55% or targeting as appreciation play with partial owner-occupancy.
+
+## Tax Benefit Analysis
+
+**Depreciation Schedule (Residential, 27.5 years):**
+- Annual depreciation deduction: $46,364 (building value $1,275,000)
+- Tax shield at 37% bracket: $17,155/year
+- Effective after-tax cost reduction: $1,430/month
+
+**1031 Exchange Potential:**
+- Property qualifies for 1031 exchange as investment property
+- Deferred gain from 2021 purchase: $125,000
+- Estimated tax deferral value: $46,250 at current capital gains rates
+- Recommended minimum hold: 2 years for exchange qualification
+
+## Neighborhood Trajectory Assessment
+
+**Growth Indicators (Positive):**
+- Penn Station $3.2B renovation (completion 2027)
+- Hudson Yards Phase 2 — 1,200 new residential units
+- Office-to-residential conversion pipeline: 2.1M sqft
+- Major employer expansion: 3,500+ new jobs within 0.5mi
+- Grid modernization investment: $180M
+
+**Pressure Points (Monitor):**
+- New supply from conversions may moderate rent growth 2026-2028
+- HOA special assessments risk (building age: 6 years — low probability)
+- Garment District rezoning could increase density competition
+
+**Trajectory Score: 8.2/10** — Strong upward momentum with infrastructure catalysts
+
+## Rental Market Absorption Rate
+
+Current Midtown South absorption metrics:
+- Average days on market (rental): 18 days
+- Vacancy rate: 2.8% (below city average of 3.4%)
+- New lease signing velocity: +8% QoQ
+- Lease renewal rate: 72%
+- Projected absorption for comparable units: 94% within 30 days
 
 ## Risk Assessment
 
@@ -291,6 +454,6 @@ Current rental rates for comparable units range from $3,800 to $5,200/month, wit
 
 ## Recommendation
 
-**BUY — Strong conviction.** The property offers an attractive entry point in a market with multiple positive catalysts. The combination of infrastructure investment (Penn Station, Hudson Yards), employment growth, and constrained supply supports continued appreciation. Recommended hold period: 5-7 years for optimal returns.
+**BUY — Strong conviction.** The property offers an attractive entry point in a market with multiple positive catalysts. The combination of infrastructure investment (Penn Station, Hudson Yards), employment growth, and constrained supply supports continued appreciation. Tax benefits via depreciation provide meaningful shelter. Recommended hold period: 5-7 years for optimal returns.
 
 *Analysis generated from 14 data sources including MLS, public records, census data, transit authorities, and real-time market intelligence.*`;

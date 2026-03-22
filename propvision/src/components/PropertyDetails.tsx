@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, Bed, Bath, Maximize, Calendar, TrendingUp, Home, Ruler } from "lucide-react";
+import { Building2, Bed, Bath, Maximize, Calendar, TrendingUp, Home, Ruler, Car, DollarSign } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
 import { AnimatedNumber } from "./ui/AnimatedNumber";
@@ -74,6 +74,34 @@ export function PropertyDetails({ data, visible, loaded }: PropertyDetailsProps)
             <StatItem icon={<Calendar size={14} />} label="Year Built" value={String(data.yearBuilt)} />
             <StatItem icon={<Home size={14} />} label="Type" value={data.propertyType} />
             <StatItem icon={<Ruler size={14} />} label="Lot Size" value={data.lotSize > 0 ? `${data.lotSize.toLocaleString()} sqft` : "N/A"} />
+            <StatItem icon={<Car size={14} />} label="Parking" value={data.parking} />
+            <StatItem icon={<DollarSign size={14} />} label="HOA/Mo" value={`$${data.hoaFee.toLocaleString()}`} />
+          </div>
+
+          {/* Amenities */}
+          <div className="border-t border-zinc-800/50 pt-2.5 mt-1">
+            <div className="text-[9px] text-zinc-500 font-mono tracking-wider mb-1.5">BUILDING AMENITIES</div>
+            <div className="flex flex-wrap gap-1">
+              {data.amenities.map((a) => (
+                <span key={a} className="tag tag-green text-[8px]">{a}</span>
+              ))}
+            </div>
+          </div>
+
+          {/* Tax History */}
+          <div className="border-t border-zinc-800/50 pt-2.5 mt-1">
+            <div className="text-[9px] text-zinc-500 font-mono tracking-wider mb-1.5">TAX HISTORY</div>
+            <div className="space-y-0.5">
+              {data.taxHistory.slice(0, 4).map((t) => (
+                <div key={t.year} className="flex justify-between text-[10px]">
+                  <span className="text-zinc-600 font-mono">{t.year}</span>
+                  <span className="text-zinc-400 font-mono">${t.tax.toLocaleString()}</span>
+                  <span className={`font-mono ${t.change >= 0 ? "text-red-400/60" : "text-accent/60"}`}>
+                    {t.change >= 0 ? "+" : ""}{t.change}%
+                  </span>
+                </div>
+              ))}
+            </div>
           </div>
 
           <div className="border-t border-zinc-800/50 pt-2.5 mt-1">
