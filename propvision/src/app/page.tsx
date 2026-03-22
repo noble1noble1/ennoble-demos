@@ -11,6 +11,8 @@ import {
   FileDown,
   Share2,
   Check,
+  Search,
+  Loader2,
   Building2,
   Home as HomeIcon,
   Hotel,
@@ -48,7 +50,7 @@ import {
 export default function Home() {
   const [hasSearched, setHasSearched] = useState(false);
   const [propertyType, setPropertyType] = useState<"condo" | "multi-family" | "single-family">("condo");
-  const { visiblePanels, loadedPanels, sourceCount, currentSourceName, isSearching, triggerLoad } =
+  const { visiblePanels, loadedPanels, sourceCount, currentSourceName, isSearching, isInitializing, triggerLoad, resetSearch } =
     useStaggeredLoad(11);
 
   const [copied, setCopied] = useState(false);
@@ -70,6 +72,11 @@ export default function Home() {
     },
     [triggerLoad]
   );
+
+  const handleNewAnalysis = useCallback(() => {
+    setHasSearched(false);
+    resetSearch();
+  }, [resetSearch]);
 
   const handleShare = useCallback(() => {
     navigator.clipboard.writeText(
@@ -131,6 +138,15 @@ export default function Home() {
             )}
             {hasSearched && sourceCount >= 14 && (
               <div className="flex items-center gap-2">
+                <button
+                  className="action-btn action-btn-secondary"
+                  onClick={handleNewAnalysis}
+                  aria-label="New analysis"
+                  title="Analyze another property"
+                >
+                  <Search size={14} />
+                  <span className="hidden sm:inline">New Analysis</span>
+                </button>
                 <button
                   className="action-btn"
                   onClick={() => {}}
@@ -309,6 +325,22 @@ export default function Home() {
           </div>
         ) : (
           <ErrorBoundary fallbackTitle="Dashboard failed to load">
+          {/* Neural Search Initialization Overlay */}
+          {isInitializing && (
+            <div className="neural-init-overlay">
+              <div className="neural-init-content">
+                <div className="neural-init-rings">
+                  <div className="neural-init-ring" />
+                  <div className="neural-init-ring" />
+                  <div className="neural-init-ring" />
+                </div>
+                <div className="neural-init-text">
+                  <Loader2 size={14} className="inline animate-spin mr-2 text-accent" />
+                  {currentSourceName}
+                </div>
+              </div>
+            </div>
+          )}
           {/* AI Badge & Timestamp Bar */}
           {sourceCount >= 14 && (
             <div className="analysis-meta-bar">
