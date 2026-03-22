@@ -45,6 +45,21 @@ export interface AIReadinessMetric {
   color: string;
 }
 
+export interface Recommendation {
+  id: number;
+  title: string;
+  description: string;
+  impact: "high" | "medium" | "low";
+  effort: "easy" | "moderate" | "hard";
+  category: string;
+}
+
+export interface ConversionCheck {
+  label: string;
+  status: "found" | "missing" | "partial";
+  detail: string;
+}
+
 export interface ScanResult {
   url: string;
   businessName: string;
@@ -56,6 +71,8 @@ export interface ScanResult {
   socialPresence: SocialPresence[];
   competitors: Competitor[];
   aiReadiness: AIReadinessMetric[];
+  recommendations: Recommendation[];
+  conversionChecks: ConversionCheck[];
 }
 
 export const mockScanResult: ScanResult = {
@@ -140,6 +157,26 @@ export const mockScanResult: ScanResult = {
     { label: "Citability Score", score: 45, detail: "Content not structured for AI extraction — needs clear claims and data", color: "#ff8800" },
     { label: "Entity Recognition", score: 52, detail: "Weak sameAs links, no Knowledge Panel claimed", color: "#ff8800" },
     { label: "Content Freshness", score: 68, detail: "Blog updated monthly, main pages stale (6+ months)", color: "#00ccff" },
+  ],
+  recommendations: [
+    { id: 1, title: "Add LocalBusiness Schema Markup", description: "Implement JSON-LD structured data for LocalBusiness, Product, and Review types to improve AI citability and rich snippet eligibility.", impact: "high", effort: "easy", category: "SEO" },
+    { id: 2, title: "Optimize Largest Contentful Paint", description: "LCP is 2.8s (target <2.5s). Compress hero images, implement lazy loading, and add preload hints for above-fold assets.", impact: "high", effort: "moderate", category: "Performance" },
+    { id: 3, title: "Fix Missing Image Alt Tags", description: "18 of 34 images lack alt text. Add descriptive alt attributes for accessibility and SEO crawlability.", impact: "medium", effort: "easy", category: "SEO" },
+    { id: 4, title: "Create llms.txt File", description: "Add an llms.txt file to help AI systems understand site structure. Include key pages, business description, and content hierarchy.", impact: "medium", effort: "easy", category: "AI Readiness" },
+    { id: 5, title: "Revive LinkedIn Presence", description: "LinkedIn has been inactive for 2 months with only 340 followers. Post weekly industry content to build B2B credibility.", impact: "low", effort: "moderate", category: "Social" },
+    { id: 6, title: "Claim Google Knowledge Panel", description: "Submit entity verification to establish brand authority in Google's knowledge graph and improve AI entity recognition.", impact: "high", effort: "hard", category: "AI Readiness" },
+    { id: 7, title: "Add Email Capture to Blog Pages", description: "Blog pages have no newsletter signup. Add exit-intent popup and inline CTAs to capture organic traffic.", impact: "medium", effort: "easy", category: "Conversion" },
+    { id: 8, title: "Improve Meta Description", description: "Current meta description is functional but not compelling. Rewrite with clear value proposition and call-to-action in 155 chars.", impact: "low", effort: "easy", category: "SEO" },
+  ],
+  conversionChecks: [
+    { label: "Newsletter Signup", status: "partial", detail: "Footer only — no inline or popup capture on high-traffic pages" },
+    { label: "Primary CTA", status: "found", detail: "'Order Now' button above fold on homepage, good contrast" },
+    { label: "Exit-Intent Popup", status: "missing", detail: "No exit-intent capture detected on any page" },
+    { label: "Social Proof", status: "partial", detail: "Customer count shown but no reviews or testimonials on landing page" },
+    { label: "Contact Form", status: "found", detail: "Contact page form with name, email, message fields" },
+    { label: "Live Chat", status: "missing", detail: "No live chat widget detected — consider adding for conversion support" },
+    { label: "Trust Badges", status: "partial", detail: "SSL badge present, missing payment security and guarantee badges" },
+    { label: "Mobile CTA Sticky", status: "missing", detail: "No sticky CTA on mobile scroll — high bounce risk" },
   ],
 };
 

@@ -11,7 +11,9 @@ import {
   Sparkles,
   Globe,
   Loader2,
-  ScanLine,
+  Lightbulb,
+  MousePointerClick,
+  ArrowLeft,
 } from "lucide-react";
 import { TechStack } from "@/components/TechStack";
 import { SEOScore } from "@/components/SEOScore";
@@ -19,6 +21,8 @@ import { PerformanceMetrics } from "@/components/PerformanceMetrics";
 import { SocialPresencePanel } from "@/components/SocialPresence";
 import { CompetitorAnalysis } from "@/components/CompetitorAnalysis";
 import { AIReadiness } from "@/components/AIReadiness";
+import { Recommendations } from "@/components/Recommendations";
+import { ConversionFlow } from "@/components/ConversionFlow";
 import { useStaggeredLoad } from "@/hooks/useStaggeredLoad";
 import { mockScanResult } from "@/lib/mockData";
 
@@ -34,7 +38,8 @@ export default function Home() {
     currentStage,
     isScanning,
     triggerLoad,
-  } = useStaggeredLoad(6);
+    resetScan,
+  } = useStaggeredLoad(8);
 
   const analysisTimestamp = new Date().toLocaleString("en-US", {
     month: "long",
@@ -68,6 +73,12 @@ export default function Home() {
     setUrl(demoUrl);
     handleScan(demoUrl);
   }, [handleScan]);
+
+  const handleNewScan = useCallback(() => {
+    setHasScanned(false);
+    setUrl("");
+    resetScan();
+  }, [resetScan]);
 
   // Keyboard shortcut
   useEffect(() => {
@@ -115,6 +126,17 @@ export default function Home() {
           )}
 
           <div className="flex-shrink-0 flex items-center gap-3">
+            {hasScanned && allLoaded && (
+              <button
+                className="action-btn action-btn-secondary"
+                onClick={handleNewScan}
+                aria-label="New scan"
+                title="Scan a different site"
+              >
+                <ArrowLeft size={14} />
+                <span className="hidden sm:inline">New Scan</span>
+              </button>
+            )}
             <div className="hidden md:flex items-center gap-3">
               <div className="status-indicator">
                 <div className="status-dot" />
@@ -199,12 +221,12 @@ export default function Home() {
 
             <div className="stats-ticker fade-up">
               <div className="ticker-item">
-                <span className="ticker-value">6</span>
+                <span className="ticker-value">8</span>
                 <span className="ticker-label">Dimensions</span>
               </div>
               <div className="ticker-divider" />
               <div className="ticker-item">
-                <span className="ticker-value cyan">50+</span>
+                <span className="ticker-value cyan">60+</span>
                 <span className="ticker-label">Checks</span>
               </div>
               <div className="ticker-divider" />
@@ -262,6 +284,20 @@ export default function Home() {
                 <span className="feature-card-label">AI Readiness</span>
                 <span className="feature-card-desc">AI visibility scoring</span>
               </div>
+              <div className="feature-card">
+                <div className="feature-card-icon-wrap">
+                  <Lightbulb size={18} className="feature-card-icon" />
+                </div>
+                <span className="feature-card-label">Recommendations</span>
+                <span className="feature-card-desc">AI action items</span>
+              </div>
+              <div className="feature-card">
+                <div className="feature-card-icon-wrap">
+                  <MousePointerClick size={18} className="feature-card-icon" />
+                </div>
+                <span className="feature-card-label">Conversions</span>
+                <span className="feature-card-desc">CTA & capture audit</span>
+              </div>
             </div>
 
             <div className="flex items-center gap-3 mt-2 fade-up">
@@ -281,9 +317,18 @@ export default function Home() {
             <div className="scan-progress-bar">
               <div className="scan-progress-fill" style={{ width: `${scanProgress}%` }} />
             </div>
+            <div className="scan-progress-pct">{Math.round(scanProgress)}%</div>
             <div className="scan-status">
               <Loader2 size={12} className="inline animate-spin mr-2 text-accent" />
               {currentStage}
+            </div>
+            {/* Stage log */}
+            <div className="scan-stage-log">
+              {scanProgress > 20 && <div className="scan-stage-done">Resolving DNS... <span className="text-accent">done</span></div>}
+              {scanProgress > 35 && <div className="scan-stage-done">Checking SSL certificate... <span className="text-accent">valid</span></div>}
+              {scanProgress > 50 && <div className="scan-stage-done">Analyzing HTML structure... <span className="text-accent">parsed</span></div>}
+              {scanProgress > 65 && <div className="scan-stage-done">Detecting tech stack... <span className="text-accent">{mockScanResult.techStack.length} found</span></div>}
+              {scanProgress > 80 && <div className="scan-stage-done">Computing scores... <span className="text-accent">ready</span></div>}
             </div>
           </div>
         ) : (
@@ -336,6 +381,16 @@ export default function Home() {
                 visible={visiblePanels[5]}
                 loaded={loadedPanels[5]}
               />
+              <Recommendations
+                data={mockScanResult.recommendations}
+                visible={visiblePanels[6]}
+                loaded={loadedPanels[6]}
+              />
+              <ConversionFlow
+                data={mockScanResult.conversionChecks}
+                visible={visiblePanels[7]}
+                loaded={loadedPanels[7]}
+              />
             </div>
           </>
         )}
@@ -359,7 +414,7 @@ export default function Home() {
             </div>
           </div>
           <div className="footer-meta">
-            <span style={{ letterSpacing: "0.06em" }}>v1.0.0</span>
+            <span style={{ letterSpacing: "0.06em" }}>v2.0.0</span>
             <span style={{ color: "#333" }}>|</span>
             <div className="footer-status">
               <span className="footer-status-dot" />
