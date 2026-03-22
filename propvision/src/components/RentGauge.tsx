@@ -3,7 +3,7 @@
 import { DollarSign } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
-import { RentEstimate } from "@/lib/mockData";
+import { RentEstimate, mockProperty } from "@/lib/mockData";
 
 interface RentGaugeProps {
   data: RentEstimate;
@@ -17,10 +17,9 @@ export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
   const max = high + 500;
   const range = max - min;
 
-  // Arc calculations
   const startAngle = -225;
   const endAngle = 45;
-  const totalArc = endAngle - startAngle; // 270 degrees
+  const totalArc = endAngle - startAngle;
   const needleAngle = startAngle + ((mid - min) / range) * totalArc;
 
   const cx = 120;
@@ -44,8 +43,11 @@ export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
 
   const lowAngle = startAngle + ((low - min) / range) * totalArc;
   const highAngle = startAngle + ((high - min) / range) * totalArc;
-
   const needleEnd = polarToCartesian(needleAngle);
+
+  const grossYield = ((mid * 12) / mockProperty.estimatedValue) * 100;
+  const capRate = ((mid * 12 * 0.65) / mockProperty.estimatedValue) * 100;
+  const annualIncome = mid * 12;
 
   return (
     <PanelCard
@@ -55,7 +57,7 @@ export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
       loaded={loaded}
       headerRight={
         loaded ? (
-          <span className="text-xs text-zinc-500 font-mono">Monthly</span>
+          <span className="tag tag-green">Monthly</span>
         ) : null
       }
     >
@@ -64,6 +66,17 @@ export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
       ) : (
         <div className="flex flex-col items-center">
           <svg width="240" height="160" viewBox="0 0 240 160">
+            {/* Glow filter */}
+            <defs>
+              <filter id="glow">
+                <feGaussianBlur stdDeviation="3" result="coloredBlur" />
+                <feMerge>
+                  <feMergeNode in="coloredBlur" />
+                  <feMergeNode in="SourceGraphic" />
+                </feMerge>
+              </filter>
+            </defs>
+
             {/* Background arc */}
             <path
               d={describeArc(startAngle, endAngle)}
@@ -79,7 +92,7 @@ export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
               stroke="#ff4444"
               strokeWidth="20"
               strokeLinecap="round"
-              opacity="0.4"
+              opacity="0.35"
             />
             {/* Mid range (green) */}
             <path
@@ -88,7 +101,8 @@ export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
               stroke="#00ff88"
               strokeWidth="20"
               strokeLinecap="round"
-              opacity="0.6"
+              opacity="0.5"
+              filter="url(#glow)"
             />
             {/* High range */}
             <path
@@ -97,7 +111,7 @@ export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
               stroke="#ff8800"
               strokeWidth="20"
               strokeLinecap="round"
-              opacity="0.4"
+              opacity="0.35"
             />
 
             {/* Needle */}
@@ -107,11 +121,12 @@ export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
               x2={needleEnd.x}
               y2={needleEnd.y}
               stroke="#00ff88"
-              strokeWidth="3"
+              strokeWidth="2.5"
               strokeLinecap="round"
               className="gauge-needle"
+              filter="url(#glow)"
             />
-            <circle cx={cx} cy={cy} r="6" fill="#00ff88" />
+            <circle cx={cx} cy={cy} r="6" fill="#00ff88" filter="url(#glow)" />
             <circle cx={cx} cy={cy} r="3" fill="#0a0a0a" />
 
             {/* Center value */}
@@ -120,7 +135,7 @@ export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
               y={cy + 35}
               textAnchor="middle"
               fill="#00ff88"
-              fontSize="28"
+              fontSize="26"
               fontFamily="monospace"
               fontWeight="bold"
             >
@@ -130,31 +145,42 @@ export function RentGauge({ data, visible, loaded }: RentGaugeProps) {
               x={cx}
               y={cy + 50}
               textAnchor="middle"
-              fill="#666"
-              fontSize="10"
+              fill="#555"
+              fontSize="9"
               fontFamily="monospace"
             >
               per month
             </text>
           </svg>
 
-          <div className="flex justify-between w-full mt-2 px-4">
+          <div className="flex justify-between w-full mt-1 px-4">
             <div className="text-center">
-              <div className="text-xs text-zinc-500">LOW</div>
-              <div className="text-sm font-mono text-red-400">${low.toLocaleString()}</div>
+              <div className="text-[10px] text-zinc-600 font-mono">LOW</div>
+              <div className="text-sm font-mono text-red-400 font-semibold">${low.toLocaleString()}</div>
             </div>
             <div className="text-center">
-              <div className="text-xs text-zinc-500">ESTIMATE</div>
+              <div className="text-[10px] text-zinc-600 font-mono">ESTIMATE</div>
               <div className="text-sm font-mono text-accent font-bold">${mid.toLocaleString()}</div>
             </div>
             <div className="text-center">
-              <div className="text-xs text-zinc-500">HIGH</div>
-              <div className="text-sm font-mono text-orange-400">${high.toLocaleString()}</div>
+              <div className="text-[10px] text-zinc-600 font-mono">HIGH</div>
+              <div className="text-sm font-mono text-orange-400 font-semibold">${high.toLocaleString()}</div>
             </div>
           </div>
 
-          <div className="mt-3 text-xs text-zinc-500 font-mono">
-            Gross Yield: {((mid * 12 / 1275000) * 100).toFixed(2)}% | Cap Rate: {((mid * 12 * 0.65 / 1275000) * 100).toFixed(2)}%
+          <div className="w-full mt-3 pt-3 border-t border-zinc-800/50 space-y-1.5">
+            <div className="flex justify-between text-[11px]">
+              <span className="text-zinc-600 font-mono">Annual Income</span>
+              <span className="text-white font-mono">${annualIncome.toLocaleString()}</span>
+            </div>
+            <div className="flex justify-between text-[11px]">
+              <span className="text-zinc-600 font-mono">Gross Yield</span>
+              <span className="text-accent font-mono font-semibold">{grossYield.toFixed(2)}%</span>
+            </div>
+            <div className="flex justify-between text-[11px]">
+              <span className="text-zinc-600 font-mono">Cap Rate</span>
+              <span className="text-accent font-mono font-semibold">{capRate.toFixed(2)}%</span>
+            </div>
           </div>
         </div>
       )}

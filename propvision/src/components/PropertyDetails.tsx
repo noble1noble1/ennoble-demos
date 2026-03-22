@@ -1,6 +1,6 @@
 "use client";
 
-import { Building2, Bed, Bath, Maximize, Calendar, DollarSign, TrendingUp, Home } from "lucide-react";
+import { Building2, Bed, Bath, Maximize, Calendar, TrendingUp, Home, Ruler } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
 import { PropertyData } from "@/lib/mockData";
@@ -27,6 +27,9 @@ export function PropertyDetails({ data, visible, loaded }: PropertyDetailsProps)
   const formatPrice = (n: number) =>
     "$" + n.toLocaleString("en-US");
 
+  const appreciation = ((data.estimatedValue - data.lastSoldPrice) / data.lastSoldPrice) * 100;
+  const pricePerSqft = Math.round(data.estimatedValue / data.sqft);
+
   return (
     <PanelCard
       title="PROPERTY DETAILS"
@@ -35,43 +38,48 @@ export function PropertyDetails({ data, visible, loaded }: PropertyDetailsProps)
       loaded={loaded}
       headerRight={
         loaded ? (
-          <span className="text-xs text-accent font-mono">LIVE</span>
+          <span className="tag tag-green">LIVE</span>
         ) : null
       }
     >
       {!loaded ? (
-        <ShimmerLoader lines={6} />
+        <ShimmerLoader lines={7} />
       ) : (
-        <div className="space-y-4">
+        <div className="space-y-3">
           <div>
-            <div className="text-lg font-semibold text-white">{data.address}</div>
-            <div className="text-sm text-zinc-400">
+            <div className="text-base font-semibold text-white leading-tight">{data.address}</div>
+            <div className="text-sm text-zinc-500 mt-0.5">
               {data.city}, {data.state} {data.zip}
             </div>
           </div>
 
-          <div className="text-2xl font-bold text-accent font-mono">
-            {formatPrice(data.estimatedValue)}
+          <div className="flex items-baseline gap-3">
+            <div className="text-2xl font-bold text-accent font-mono">
+              {formatPrice(data.estimatedValue)}
+            </div>
+            <div className="flex items-center gap-1">
+              <TrendingUp size={12} className="text-accent" />
+              <span className="text-xs text-accent font-mono font-semibold">+{appreciation.toFixed(1)}%</span>
+            </div>
           </div>
-          <div className="text-xs text-zinc-500">Estimated Market Value</div>
+          <div className="flex items-center gap-3">
+            <span className="text-[10px] text-zinc-600 font-mono">Est. Market Value</span>
+            <span className="text-[10px] text-zinc-600 font-mono">&bull; ${pricePerSqft}/sqft</span>
+          </div>
 
-          <div className="grid grid-cols-2 gap-3">
+          <div className="grid grid-cols-2 gap-2">
             <StatItem icon={<Bed size={14} />} label="Bedrooms" value={String(data.beds)} />
             <StatItem icon={<Bath size={14} />} label="Bathrooms" value={String(data.baths)} />
             <StatItem icon={<Maximize size={14} />} label="Sq Ft" value={data.sqft.toLocaleString()} />
             <StatItem icon={<Calendar size={14} />} label="Year Built" value={String(data.yearBuilt)} />
             <StatItem icon={<Home size={14} />} label="Type" value={data.propertyType} />
-            <StatItem
-              icon={<TrendingUp size={14} />}
-              label="Appreciation"
-              value={`+${(((data.estimatedValue - data.lastSoldPrice) / data.lastSoldPrice) * 100).toFixed(1)}%`}
-            />
+            <StatItem icon={<Ruler size={14} />} label="Lot Size" value={data.lotSize > 0 ? `${data.lotSize.toLocaleString()} sqft` : "N/A"} />
           </div>
 
-          <div className="border-t border-zinc-800 pt-3 mt-3">
-            <div className="flex justify-between text-xs text-zinc-500">
-              <span>Last Sold: {data.lastSold}</span>
-              <span>{formatPrice(data.lastSoldPrice)}</span>
+          <div className="border-t border-zinc-800/50 pt-2.5 mt-1">
+            <div className="flex justify-between text-[11px]">
+              <span className="text-zinc-600">Last Sold: {data.lastSold}</span>
+              <span className="text-zinc-400 font-mono">{formatPrice(data.lastSoldPrice)}</span>
             </div>
           </div>
         </div>
