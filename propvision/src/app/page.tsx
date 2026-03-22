@@ -2,9 +2,6 @@
 
 import { useState, useCallback, useEffect } from "react";
 import {
-  Activity,
-  Database,
-  Wifi,
   TrendingUp,
   Brain,
   Shield,
@@ -106,59 +103,119 @@ export default function Home() {
       <main className="flex-1 relative z-10">
         {!hasSearched ? (
           <div className="empty-state">
+            {/* Floating data particles */}
+            <div className="data-particles">
+              <span className="data-particle">$425,000</span>
+              <span className="data-particle">ROI 8.2%</span>
+              <span className="data-particle">Cap Rate 6.1</span>
+              <span className="data-particle">3bd / 2ba</span>
+              <span className="data-particle">$2,450/mo</span>
+              <span className="data-particle">Appreciation +4.3%</span>
+              <span className="data-particle">Walk Score 82</span>
+              <span className="data-particle">Days on Market 12</span>
+            </div>
+
+            {/* Scan line */}
+            <div className="scan-line" />
+
             {/* Radar animation */}
             <div className="radar-container">
               <div className="radar-ring" />
               <div className="radar-ring" />
               <div className="radar-ring" />
+              <div className="radar-ring" />
+              <div className="radar-sweep" />
             </div>
 
-            <div>
+            <div className="fade-up">
               <div className="empty-state-title">PROPVISION</div>
               <div className="logo-sub text-center mt-1">
                 AI PROPERTY INVESTMENT COMMAND CENTER
               </div>
             </div>
 
-            <p className="empty-state-sub">
+            <p className="empty-state-sub fade-up">
               Enter any US property address to generate a comprehensive
               AI-powered investment analysis. Real-time data from 14+ sources
               including MLS, public records, and neural search intelligence.
             </p>
 
-            <SearchBar
-              onSearch={handleSearch}
-              isSearching={isSearching && sourceCount < 14}
-            />
+            <div className="fade-up" style={{ width: "100%", display: "flex", justifyContent: "center" }}>
+              <SearchBar
+                onSearch={handleSearch}
+                isSearching={isSearching && sourceCount < 14}
+              />
+            </div>
 
-            <div className="feature-grid">
-              <div className="feature-card">
-                <TrendingUp size={20} className="feature-card-icon" />
-                <span className="feature-card-label">Market Trends</span>
+            {/* Live stats ticker */}
+            <div className="stats-ticker fade-up">
+              <div className="ticker-item">
+                <span className="ticker-value">2.4M</span>
+                <span className="ticker-label">Properties</span>
               </div>
-              <div className="feature-card">
-                <Brain size={20} className="feature-card-icon" />
-                <span className="feature-card-label">AI Analysis</span>
+              <div className="ticker-divider" />
+              <div className="ticker-item">
+                <span className="ticker-value cyan">14</span>
+                <span className="ticker-label">Data Sources</span>
               </div>
-              <div className="feature-card">
-                <Shield size={20} className="feature-card-icon" />
-                <span className="feature-card-label">Risk Scoring</span>
+              <div className="ticker-divider" />
+              <div className="ticker-item">
+                <span className="ticker-value">98%</span>
+                <span className="ticker-label">Accuracy</span>
               </div>
-              <div className="feature-card">
-                <BarChart3 size={20} className="feature-card-icon" />
-                <span className="feature-card-label">Cash Flow</span>
-              </div>
-              <div className="feature-card">
-                <Zap size={20} className="feature-card-icon" />
-                <span className="feature-card-label">14+ Sources</span>
-              </div>
-              <div className="feature-card">
-                <Globe size={20} className="feature-card-icon" />
-                <span className="feature-card-label">Live Intel</span>
+              <div className="ticker-divider" />
+              <div className="ticker-item">
+                <span className="ticker-value cyan">&lt;3s</span>
+                <span className="ticker-label">Analysis</span>
               </div>
             </div>
 
-            <div className="flex items-center gap-3 mt-2">
+            <div className="feature-grid fade-up">
+              <div className="feature-card">
+                <div className="feature-card-icon-wrap">
+                  <TrendingUp size={18} className="feature-card-icon" />
+                </div>
+                <span className="feature-card-label">Market Trends</span>
+                <span className="feature-card-desc">Live pricing and appreciation data</span>
+              </div>
+              <div className="feature-card">
+                <div className="feature-card-icon-wrap">
+                  <Brain size={18} className="feature-card-icon" />
+                </div>
+                <span className="feature-card-label">AI Analysis</span>
+                <span className="feature-card-desc">Neural-powered investment briefs</span>
+              </div>
+              <div className="feature-card">
+                <div className="feature-card-icon-wrap">
+                  <Shield size={18} className="feature-card-icon" />
+                </div>
+                <span className="feature-card-label">Risk Scoring</span>
+                <span className="feature-card-desc">Multi-factor risk assessment</span>
+              </div>
+              <div className="feature-card">
+                <div className="feature-card-icon-wrap">
+                  <BarChart3 size={18} className="feature-card-icon" />
+                </div>
+                <span className="feature-card-label">Cash Flow</span>
+                <span className="feature-card-desc">Rent estimates and projections</span>
+              </div>
+              <div className="feature-card">
+                <div className="feature-card-icon-wrap">
+                  <Zap size={18} className="feature-card-icon" />
+                </div>
+                <span className="feature-card-label">14+ Sources</span>
+                <span className="feature-card-desc">MLS, records, and more</span>
+              </div>
+              <div className="feature-card">
+                <div className="feature-card-icon-wrap">
+                  <Globe size={18} className="feature-card-icon" />
+                </div>
+                <span className="feature-card-label">Live Intel</span>
+                <span className="feature-card-desc">Real-time market intelligence</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-2 fade-up">
               <span className="kbd">⌘K</span>
               <span className="text-xs text-zinc-600 font-mono">to search</span>
             </div>
