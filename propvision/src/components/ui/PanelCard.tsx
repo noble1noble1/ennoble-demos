@@ -24,6 +24,8 @@ export function PanelCard({
   return (
     <div
       className={`panel-card ${visible ? "panel-visible" : "panel-hidden"} ${className}`}
+      role="region"
+      aria-label={title}
     >
       <div className="panel-header">
         <div className="flex items-center gap-2">

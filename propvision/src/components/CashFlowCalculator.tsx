@@ -67,9 +67,10 @@ function EditableInput({ value, onChange, label, prefix = "$" }: {
           }}
           onKeyDown={(e) => { if (e.key === "Enter") (e.target as HTMLInputElement).blur(); }}
           autoFocus
+          aria-label={`Edit ${label}`}
         />
       ) : (
-        <button className="cashflow-value-btn" onClick={() => setEditing(true)}>
+        <button className="cashflow-value-btn" onClick={() => setEditing(true)} aria-label={`Edit ${label}: ${prefix}${value.toLocaleString()}`}>
           {prefix}{value.toLocaleString()}
         </button>
       )}
@@ -131,6 +132,8 @@ export function CashFlowCalculator({ visible, loaded, propertyValue, monthlyRent
             <button
               className="cashflow-section-header clickable"
               onClick={() => setShowExpenses(!showExpenses)}
+              aria-expanded={showExpenses}
+              aria-label="Toggle expense details"
             >
               <span className="cashflow-section-title">
                 EXPENSES
