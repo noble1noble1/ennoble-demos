@@ -1,7 +1,17 @@
 "use client";
 
-import { useState, useCallback } from "react";
-import { Activity, Database, Wifi } from "lucide-react";
+import { useState, useCallback, useEffect } from "react";
+import {
+  Activity,
+  Database,
+  Wifi,
+  TrendingUp,
+  Brain,
+  Shield,
+  BarChart3,
+  Zap,
+  Globe,
+} from "lucide-react";
 import { SearchBar } from "@/components/SearchBar";
 import { PropertyDetails } from "@/components/PropertyDetails";
 import { MapView } from "@/components/MapView";
@@ -35,6 +45,23 @@ export default function Home() {
     [triggerLoad]
   );
 
+  // Keyboard shortcut: Cmd+K to focus search
+  useEffect(() => {
+    function handleKeyDown(e: KeyboardEvent) {
+      if ((e.metaKey || e.ctrlKey) && e.key === "k") {
+        e.preventDefault();
+        const input = document.querySelector<HTMLInputElement>(".search-input");
+        input?.focus();
+      }
+      if (e.key === "Escape") {
+        const input = document.querySelector<HTMLInputElement>(".search-input");
+        input?.blur();
+      }
+    }
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, []);
+
   return (
     <div className="flex flex-col min-h-screen relative">
       {/* Grid background */}
@@ -48,14 +75,16 @@ export default function Home() {
             <div className="logo-sub">AI INVESTMENT COMMAND CENTER</div>
           </div>
 
-          <SearchBar onSearch={handleSearch} isSearching={isSearching && sourceCount < 14} />
+          {hasSearched && (
+            <SearchBar onSearch={handleSearch} isSearching={isSearching && sourceCount < 14} />
+          )}
 
           <div className="flex-shrink-0 flex items-center gap-4">
             {hasSearched && sourceCount > 0 && (
               <div className="source-counter">
                 <div className="source-dot" />
                 {sourceCount < 14
-                  ? `Analyzing ${sourceCount} sources...`
+                  ? `Analyzing ${sourceCount}/14 sources...`
                   : "14 sources analyzed"}
               </div>
             )}
@@ -77,34 +106,61 @@ export default function Home() {
       <main className="flex-1 relative z-10">
         {!hasSearched ? (
           <div className="empty-state">
+            {/* Radar animation */}
+            <div className="radar-container">
+              <div className="radar-ring" />
+              <div className="radar-ring" />
+              <div className="radar-ring" />
+            </div>
+
             <div>
               <div className="empty-state-title">PROPVISION</div>
               <div className="logo-sub text-center mt-1">
                 AI PROPERTY INVESTMENT COMMAND CENTER
               </div>
             </div>
+
             <p className="empty-state-sub">
               Enter any US property address to generate a comprehensive
-              investment analysis. Powered by real-time data from 14+ sources
-              including MLS, public records, and AI intelligence.
+              AI-powered investment analysis. Real-time data from 14+ sources
+              including MLS, public records, and neural search intelligence.
             </p>
+
             <SearchBar
               onSearch={handleSearch}
               isSearching={isSearching && sourceCount < 14}
             />
-            <div className="flex gap-6 mt-4">
-              <div className="status-indicator">
-                <Activity size={12} className="text-accent" />
-                Real-time Analysis
+
+            <div className="feature-grid">
+              <div className="feature-card">
+                <TrendingUp size={20} className="feature-card-icon" />
+                <span className="feature-card-label">Market Trends</span>
               </div>
-              <div className="status-indicator">
-                <Database size={12} className="text-accent" />
-                14+ Data Sources
+              <div className="feature-card">
+                <Brain size={20} className="feature-card-icon" />
+                <span className="feature-card-label">AI Analysis</span>
               </div>
-              <div className="status-indicator">
-                <Wifi size={12} className="text-accent" />
-                AI Intelligence
+              <div className="feature-card">
+                <Shield size={20} className="feature-card-icon" />
+                <span className="feature-card-label">Risk Scoring</span>
               </div>
+              <div className="feature-card">
+                <BarChart3 size={20} className="feature-card-icon" />
+                <span className="feature-card-label">Cash Flow</span>
+              </div>
+              <div className="feature-card">
+                <Zap size={20} className="feature-card-icon" />
+                <span className="feature-card-label">14+ Sources</span>
+              </div>
+              <div className="feature-card">
+                <Globe size={20} className="feature-card-icon" />
+                <span className="feature-card-label">Live Intel</span>
+              </div>
+            </div>
+
+            <div className="flex items-center gap-3 mt-2">
+              <span className="kbd">⌘K</span>
+              <span className="text-xs text-zinc-600 font-mono">to search</span>
             </div>
           </div>
         ) : (
