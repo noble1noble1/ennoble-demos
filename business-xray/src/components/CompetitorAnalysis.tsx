@@ -1,5 +1,6 @@
 "use client";
 
+import { useState } from "react";
 import { Target, TrendingUp, TrendingDown } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
@@ -19,6 +20,7 @@ function getScoreColor(score: number): string {
 }
 
 export function CompetitorAnalysis({ data, subjectScore, visible, loaded }: CompetitorAnalysisProps) {
+  const [selectedCompetitor, setSelectedCompetitor] = useState<string | null>(null);
   const maxScore = Math.max(subjectScore, ...data.map((c) => c.overallScore));
 
   return (
@@ -56,11 +58,13 @@ export function CompetitorAnalysis({ data, subjectScore, visible, loaded }: Comp
             {data.map((comp, i) => {
               const diff = comp.overallScore - subjectScore;
               const color = getScoreColor(comp.overallScore);
+              const isSelected = selectedCompetitor === comp.name;
               return (
                 <div
                   key={comp.name}
-                  className="comp-chart-row"
+                  className={`comp-chart-row comp-chart-row-clickable ${isSelected ? "comp-chart-row-selected" : ""}`}
                   style={{ animation: `fadeSlideIn 0.4s ease-out ${(i + 1) * 80}ms forwards`, opacity: 0 }}
+                  onClick={() => setSelectedCompetitor(isSelected ? null : comp.name)}
                 >
                   <div className="comp-chart-label">
                     <span className="text-[10px] font-mono text-zinc-400 truncate">{comp.name}</span>
@@ -90,8 +94,9 @@ export function CompetitorAnalysis({ data, subjectScore, visible, loaded }: Comp
             {data.map((comp, i) => (
               <div
                 key={comp.name}
-                className="comp-detail-row"
+                className={`comp-detail-row ${selectedCompetitor === comp.name ? "comp-detail-row-selected" : ""}`}
                 style={{ animation: `fadeSlideIn 0.4s ease-out ${(i + 1) * 80 + 200}ms forwards`, opacity: 0 }}
+                onClick={() => setSelectedCompetitor(selectedCompetitor === comp.name ? null : comp.name)}
               >
                 <div className="flex items-center justify-between">
                   <div className="text-[11px] text-zinc-400 font-medium">{comp.name}</div>

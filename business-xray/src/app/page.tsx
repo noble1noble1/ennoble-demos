@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, useRef } from "react";
 import {
   Code2,
   Search,
@@ -14,6 +14,7 @@ import {
   Lightbulb,
   MousePointerClick,
   ArrowLeft,
+  FileDown,
 } from "lucide-react";
 import { TechStack } from "@/components/TechStack";
 import { SEOScore } from "@/components/SEOScore";
@@ -23,8 +24,32 @@ import { CompetitorAnalysis } from "@/components/CompetitorAnalysis";
 import { AIReadiness } from "@/components/AIReadiness";
 import { Recommendations } from "@/components/Recommendations";
 import { ConversionFlow } from "@/components/ConversionFlow";
+import { ExecutiveSummary } from "@/components/ExecutiveSummary";
 import { useStaggeredLoad } from "@/hooks/useStaggeredLoad";
 import { mockScanResult } from "@/lib/mockData";
+
+function AnimatedScore({ value, duration = 1200 }: { value: number; duration?: number }) {
+  const [display, setDisplay] = useState(0);
+  const started = useRef(false);
+
+  useEffect(() => {
+    if (started.current) return;
+    started.current = true;
+    const startTime = Date.now();
+
+    function tick() {
+      const elapsed = Date.now() - startTime;
+      const progress = Math.min(elapsed / duration, 1);
+      const eased = 1 - Math.pow(1 - progress, 3);
+      setDisplay(Math.round(eased * value));
+      if (progress < 1) requestAnimationFrame(tick);
+    }
+
+    requestAnimationFrame(tick);
+  }, [value, duration]);
+
+  return <>{display}</>;
+}
 
 export default function Home() {
   const [hasScanned, setHasScanned] = useState(false);
@@ -39,7 +64,7 @@ export default function Home() {
     isScanning,
     triggerLoad,
     resetScan,
-  } = useStaggeredLoad(8);
+  } = useStaggeredLoad(9);
 
   const analysisTimestamp = new Date().toLocaleString("en-US", {
     month: "long",
@@ -56,6 +81,7 @@ export default function Home() {
       setUrl(inputUrl.trim());
       setHasScanned(true);
       triggerLoad();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [triggerLoad]
   );
@@ -127,15 +153,26 @@ export default function Home() {
 
           <div className="flex-shrink-0 flex items-center gap-3">
             {hasScanned && allLoaded && (
-              <button
-                className="action-btn action-btn-secondary"
-                onClick={handleNewScan}
-                aria-label="New scan"
-                title="Scan a different site"
-              >
-                <ArrowLeft size={14} />
-                <span className="hidden sm:inline">New Scan</span>
-              </button>
+              <div className="header-actions">
+                <button
+                  className="action-btn action-btn-secondary"
+                  onClick={handleNewScan}
+                  aria-label="New scan"
+                  title="Scan a different site"
+                >
+                  <ArrowLeft size={14} />
+                  <span className="hidden sm:inline">New Scan</span>
+                </button>
+                <button
+                  className="action-btn"
+                  onClick={() => {}}
+                  aria-label="Download full report"
+                  title="Download Full Report"
+                >
+                  <FileDown size={14} />
+                  <span className="hidden sm:inline">Full Report</span>
+                </button>
+              </div>
             )}
             <div className="hidden md:flex items-center gap-3">
               <div className="status-indicator">
@@ -364,7 +401,7 @@ export default function Home() {
                     className="overall-score-arc"
                   />
                   <text x="60" y="56" textAnchor="middle" fill="white" fontSize="32" fontFamily="monospace" fontWeight="bold">
-                    {mockScanResult.overallScore}
+                    <AnimatedScore value={mockScanResult.overallScore} />
                   </text>
                   <text x="60" y="72" textAnchor="middle" fill="#666" fontSize="10" fontFamily="monospace">/100</text>
                 </svg>
@@ -439,6 +476,11 @@ export default function Home() {
                 data={mockScanResult.conversionChecks}
                 visible={visiblePanels[7]}
                 loaded={loadedPanels[7]}
+              />
+              <ExecutiveSummary
+                data={mockScanResult}
+                visible={visiblePanels[8]}
+                loaded={loadedPanels[8]}
               />
             </div>
           </>

@@ -18,9 +18,9 @@ const impactColors = {
 };
 
 const effortIcons = {
-  easy: { icon: Zap, label: "Quick Win" },
-  moderate: { icon: Clock, label: "Moderate" },
-  hard: { icon: Wrench, label: "Complex" },
+  easy: { icon: Zap, label: "Quick Win", time: "< 1 hour" },
+  moderate: { icon: Clock, label: "Moderate", time: "2-4 hours" },
+  hard: { icon: Wrench, label: "Complex", time: "1-2 days" },
 };
 
 export function Recommendations({ data, visible, loaded }: RecommendationsProps) {
@@ -79,6 +79,10 @@ export function Recommendations({ data, visible, loaded }: RecommendationsProps)
                       <span className="rec-effort">
                         <EffortIcon size={8} />
                         {effort.label}
+                      </span>
+                      <span className="rec-time">
+                        <Clock size={7} />
+                        {effort.time}
                       </span>
                       <span className="text-[8px] text-zinc-600 font-mono ml-auto">{rec.category}</span>
                     </div>
