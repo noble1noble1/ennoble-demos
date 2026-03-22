@@ -33,7 +33,7 @@ import {
 
 export default function Home() {
   const [hasSearched, setHasSearched] = useState(false);
-  const { visiblePanels, loadedPanels, sourceCount, isSearching, triggerLoad } =
+  const { visiblePanels, loadedPanels, sourceCount, currentSourceName, isSearching, triggerLoad } =
     useStaggeredLoad(10);
 
   const handleSearch = useCallback(
@@ -82,9 +82,16 @@ export default function Home() {
             {hasSearched && sourceCount > 0 && (
               <div className="source-counter">
                 <div className="source-dot" />
-                {sourceCount < 14
-                  ? `Analyzing ${sourceCount}/14 sources...`
-                  : "14 sources analyzed"}
+                <div className="source-counter-content">
+                  <span>
+                    {sourceCount < 14
+                      ? `Analyzing ${sourceCount}/14 sources...`
+                      : "14 sources analyzed"}
+                  </span>
+                  {sourceCount < 14 && currentSourceName && (
+                    <span className="source-name">{currentSourceName}</span>
+                  )}
+                </div>
               </div>
             )}
             <div className="hidden md:flex items-center gap-3">

@@ -156,6 +156,18 @@ body {
   border: 1px solid rgba(0, 255, 136, 0.1);
 }
 
+.source-counter-content {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
+}
+
+.source-name {
+  font-size: 9px;
+  color: rgba(0, 255, 136, 0.5);
+  animation: fadeSlideIn 0.3s ease-out;
+}
+
 .source-dot {
   width: 6px;
   height: 6px;
@@ -163,6 +175,9 @@ body {
   background: var(--accent);
   box-shadow: 0 0 8px var(--accent);
   animation: pulse-dot 1.5s ease-in-out infinite;
+  flex-shrink: 0;
+  align-self: flex-start;
+  margin-top: 4px;
 }
 
 @keyframes pulse-dot {
