@@ -701,6 +701,31 @@ body::after {
   margin-left: 16px;
   margin-right: 16px;
   margin-bottom: 0;
+  animation: scoreHeroIn 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+@keyframes scoreHeroIn {
+  from { opacity: 0; transform: translateY(16px) scale(0.98); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+.overall-score-ring-wrap {
+  position: relative;
+}
+
+.overall-score-ring-wrap::after {
+  content: "";
+  position: absolute;
+  inset: -4px;
+  border-radius: 50%;
+  background: radial-gradient(circle, rgba(0,255,136,0.08) 0%, transparent 70%);
+  animation: scoreGlow 3s ease-in-out infinite;
+  pointer-events: none;
+}
+
+@keyframes scoreGlow {
+  0%, 100% { opacity: 0.5; transform: scale(1); }
+  50% { opacity: 1; transform: scale(1.05); }
 }
 
 .overall-score-arc {
