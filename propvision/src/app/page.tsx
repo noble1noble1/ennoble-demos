@@ -57,19 +57,27 @@ export default function Home() {
   const [copied, setCopied] = useState(false);
   const [showHowItWorks, setShowHowItWorks] = useState(false);
 
-  const analysisTimestamp = new Date().toLocaleString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
+  const [analysisTimestamp, setAnalysisTimestamp] = useState("");
+
+  // Avoid hydration mismatch: only compute timestamp on client
+  useEffect(() => {
+    setAnalysisTimestamp(
+      new Date().toLocaleString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      })
+    );
+  }, [hasSearched]);
 
   const handleSearch = useCallback(
     (_address: string) => {
       setHasSearched(true);
       triggerLoad();
+      window.scrollTo({ top: 0, behavior: "smooth" });
     },
     [triggerLoad]
   );
@@ -106,6 +114,16 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen relative">
+      {/* Top loading bar */}
+      {isSearching && sourceCount < 14 && (
+        <div className="top-loading-bar" aria-hidden="true">
+          <div
+            className="top-loading-bar-fill"
+            style={{ width: `${Math.min((sourceCount / 14) * 100, 95)}%` }}
+          />
+        </div>
+      )}
+
       {/* Grid background */}
       <div className="grid-lines" />
 

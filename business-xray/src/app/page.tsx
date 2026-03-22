@@ -66,14 +66,21 @@ export default function Home() {
     resetScan,
   } = useStaggeredLoad(9);
 
-  const analysisTimestamp = new Date().toLocaleString("en-US", {
-    month: "long",
-    day: "numeric",
-    year: "numeric",
-    hour: "numeric",
-    minute: "2-digit",
-    hour12: true,
-  });
+  const [analysisTimestamp, setAnalysisTimestamp] = useState("");
+
+  // Avoid hydration mismatch: only compute timestamp on client
+  useEffect(() => {
+    setAnalysisTimestamp(
+      new Date().toLocaleString("en-US", {
+        month: "long",
+        day: "numeric",
+        year: "numeric",
+        hour: "numeric",
+        minute: "2-digit",
+        hour12: true,
+      })
+    );
+  }, [hasScanned]);
 
   const handleScan = useCallback(
     (inputUrl: string) => {
@@ -123,6 +130,16 @@ export default function Home() {
 
   return (
     <div className="flex flex-col min-h-screen relative">
+      {/* Top loading bar */}
+      {isScanning && (
+        <div className="top-loading-bar" aria-hidden="true">
+          <div
+            className="top-loading-bar-fill"
+            style={{ width: `${Math.min(scanProgress, 95)}%` }}
+          />
+        </div>
+      )}
+
       <div className="grid-lines" />
 
       {/* Header */}
