@@ -1,3 +1,0 @@
-module.exports=[67628,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(78815);a.n(d("[project]/business-xray/node_modules/next/dist/client/components/builtin/global-error.js <module evaluation>"))},25275,(a,b,c)=>{let{createClientModuleProxy:d}=a.r(78815);a.n(d("[project]/business-xray/node_modules/next/dist/client/components/builtin/global-error.js"))},41127,a=>{"use strict";a.i(67628);var b=a.i(25275);a.n(b)},55161,a=>{a.n(a.i(41127))}];
-
-//# sourceMappingURL=0r2__next_dist_client_components_builtin_global-error_0.vnqua.js.map
