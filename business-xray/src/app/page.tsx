@@ -444,7 +444,7 @@ export default function Home() {
                         />
                       </div>
                       <span className="overall-score-item-value" style={{ color: item.score >= 80 ? "#00ff88" : item.score >= 60 ? "#ff8800" : "#ff4444" }}>
-                        {item.score}
+                        <AnimatedScore value={item.score} duration={800} />
                       </span>
                     </div>
                   ))}
