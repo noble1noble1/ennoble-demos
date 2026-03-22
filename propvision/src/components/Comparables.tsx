@@ -1,5 +1,6 @@
 "use client";
 
+import { memo } from "react";
 import { LayoutGrid, Bed, Bath, Maximize, Calendar, Clock, TrendingUp, TrendingDown, Image } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
@@ -124,7 +125,7 @@ function CompCard({ comp, index }: { comp: ComparableProperty; index: number }) 
   );
 }
 
-export function Comparables({ data, visible, loaded }: ComparablesProps) {
+export const Comparables = memo(function Comparables({ data, visible, loaded }: ComparablesProps) {
   const avgPrice = Math.round(data.reduce((s, c) => s + c.price, 0) / data.length);
   const avgPpsf = Math.round(data.reduce((s, c) => s + c.price / c.sqft, 0) / data.length);
   const avgDom = Math.round(
@@ -161,4 +162,4 @@ export function Comparables({ data, visible, loaded }: ComparablesProps) {
       )}
     </PanelCard>
   );
-}
+});

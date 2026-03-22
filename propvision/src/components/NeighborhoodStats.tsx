@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { MapPin, Users, Shield } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
@@ -108,7 +108,7 @@ function DemographicRow({ label, value }: { label: string; value: string }) {
   );
 }
 
-export function NeighborhoodStats({ data, visible, loaded }: NeighborhoodStatsProps) {
+export const NeighborhoodStats = memo(function NeighborhoodStats({ data, visible, loaded }: NeighborhoodStatsProps) {
   const safetyScore = 100 - data.crimeIndex;
 
   return (
@@ -168,4 +168,4 @@ export function NeighborhoodStats({ data, visible, loaded }: NeighborhoodStatsPr
       )}
     </PanelCard>
   );
-}
+});

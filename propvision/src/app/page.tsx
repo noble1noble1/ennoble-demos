@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useCallback, useEffect } from "react";
+import { useState, useCallback, useEffect, lazy, Suspense } from "react";
 import {
   TrendingUp,
   Brain,
@@ -22,11 +22,16 @@ import { RentGauge } from "@/components/RentGauge";
 import { MarketTrends } from "@/components/MarketTrends";
 import { Comparables } from "@/components/Comparables";
 import { NeighborhoodStats } from "@/components/NeighborhoodStats";
-import { IntelligenceFeed } from "@/components/IntelligenceFeed";
-import { InvestmentBrief } from "@/components/InvestmentBrief";
-import { CashFlowCalculator } from "@/components/CashFlowCalculator";
-import { RiskScore } from "@/components/RiskScore";
+import { ErrorBoundary } from "@/components/ui/ErrorBoundary";
+import { ShimmerLoader } from "@/components/ui/ShimmerLoader";
+import { PanelCard } from "@/components/ui/PanelCard";
 import { useStaggeredLoad } from "@/hooks/useStaggeredLoad";
+
+// Lazy load below-fold panels
+const IntelligenceFeed = lazy(() => import("@/components/IntelligenceFeed").then(m => ({ default: m.IntelligenceFeed })));
+const InvestmentBrief = lazy(() => import("@/components/InvestmentBrief").then(m => ({ default: m.InvestmentBrief })));
+const CashFlowCalculator = lazy(() => import("@/components/CashFlowCalculator").then(m => ({ default: m.CashFlowCalculator })));
+const RiskScore = lazy(() => import("@/components/RiskScore").then(m => ({ default: m.RiskScore })));
 import {
   mockProperty,
   mockComparables,
@@ -290,6 +295,7 @@ export default function Home() {
             </div>
           </div>
         ) : (
+          <ErrorBoundary fallbackTitle="Dashboard failed to load">
           <div className="dashboard-grid" role="region" aria-label="Property analysis dashboard">
             <PropertyDetails
               data={mockProperty}
@@ -322,27 +328,36 @@ export default function Home() {
               visible={visiblePanels[5]}
               loaded={loadedPanels[5]}
             />
-            <CashFlowCalculator
-              visible={visiblePanels[6]}
-              loaded={loadedPanels[6]}
-              propertyValue={mockProperty.estimatedValue}
-              monthlyRent={mockRentEstimate.mid}
-            />
-            <RiskScore
-              visible={visiblePanels[7]}
-              loaded={loadedPanels[7]}
-            />
-            <IntelligenceFeed
-              data={mockIntelItems}
-              visible={visiblePanels[8]}
-              loaded={loadedPanels[8]}
-            />
-            <InvestmentBrief
-              content={mockInvestmentBrief}
-              visible={visiblePanels[9]}
-              loaded={loadedPanels[9]}
-            />
+            <Suspense fallback={<PanelCard title="CASH FLOW CALCULATOR" visible={visiblePanels[6]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
+              <CashFlowCalculator
+                visible={visiblePanels[6]}
+                loaded={loadedPanels[6]}
+                propertyValue={mockProperty.estimatedValue}
+                monthlyRent={mockRentEstimate.mid}
+              />
+            </Suspense>
+            <Suspense fallback={<PanelCard title="RISK ASSESSMENT" visible={visiblePanels[7]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
+              <RiskScore
+                visible={visiblePanels[7]}
+                loaded={loadedPanels[7]}
+              />
+            </Suspense>
+            <Suspense fallback={<PanelCard title="AI INTELLIGENCE FEED" visible={visiblePanels[8]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
+              <IntelligenceFeed
+                data={mockIntelItems}
+                visible={visiblePanels[8]}
+                loaded={loadedPanels[8]}
+              />
+            </Suspense>
+            <Suspense fallback={<PanelCard title="AI INVESTMENT BRIEF" visible={visiblePanels[9]} loaded={false}><ShimmerLoader lines={6} /></PanelCard>}>
+              <InvestmentBrief
+                content={mockInvestmentBrief}
+                visible={visiblePanels[9]}
+                loaded={loadedPanels[9]}
+              />
+            </Suspense>
           </div>
+          </ErrorBoundary>
         )}
       </main>
 

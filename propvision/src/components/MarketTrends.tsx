@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, memo } from "react";
 import { TrendingUp } from "lucide-react";
 import {
   AreaChart,
@@ -39,7 +39,7 @@ function CustomTooltip({ active, payload, label }: { active?: boolean; payload?:
   );
 }
 
-export function MarketTrends({ data, visible, loaded }: MarketTrendsProps) {
+export const MarketTrends = memo(function MarketTrends({ data, visible, loaded }: MarketTrendsProps) {
   const [animate, setAnimate] = useState(false);
 
   useEffect(() => {
@@ -166,4 +166,4 @@ export function MarketTrends({ data, visible, loaded }: MarketTrendsProps) {
       )}
     </PanelCard>
   );
-}
+});
