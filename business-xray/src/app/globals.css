@@ -1621,3 +1621,35 @@ body::after {
   .empty-state-title { font-size: 24px; }
   .feature-grid { grid-template-columns: 1fr; }
 }
+
+/* ========== PRINT ========== */
+@media print {
+  body::after, .grid-lines, .top-loading-bar, .scanning-overlay,
+  .data-particles, .scan-line, .radar-container, .typing-cursor,
+  .typing-dot, .app-footer { display: none !important; }
+  body { background: white !important; color: black !important; }
+  .app-header {
+    position: static !important;
+    background: white !important;
+    border-bottom: 2px solid #000 !important;
+    backdrop-filter: none !important;
+  }
+  .logo { -webkit-text-fill-color: #000 !important; }
+  .panel-card {
+    break-inside: avoid;
+    border: 1px solid #ddd !important;
+    background: white !important;
+    box-shadow: none !important;
+  }
+  .panel-card:hover { transform: none !important; }
+  .panel-card::before, .panel-card::after { display: none !important; }
+  .panel-header { background: #f5f5f5 !important; border-bottom-color: #ddd !important; }
+  .panel-title { color: #333 !important; }
+  .overall-score-hero {
+    background: white !important;
+    border: 2px solid #ddd !important;
+  }
+  .overall-score-ring-wrap::after { display: none !important; }
+  .dashboard-grid { gap: 12px !important; }
+  .exec-container { max-height: none !important; overflow: visible !important; }
+}
