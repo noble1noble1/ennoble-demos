@@ -103,7 +103,7 @@ export function MapView({ property, comparables, visible, loaded }: MapViewProps
 
         map.on("error", () => {
           setMapFailed(true);
-          map?.remove();
+          try { map?.remove(); } catch { /* map cleanup can fail with invalid token */ }
           mapRef.current = null;
         });
 
@@ -131,7 +131,7 @@ export function MapView({ property, comparables, visible, loaded }: MapViewProps
 
     return () => {
       if (map) {
-        map.remove();
+        try { map.remove(); } catch { /* map cleanup can fail with invalid token */ }
         mapRef.current = null;
       }
     };
