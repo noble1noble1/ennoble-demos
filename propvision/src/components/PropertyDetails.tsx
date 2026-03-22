@@ -1,7 +1,7 @@
 "use client";
 
 import { memo } from "react";
-import { Building2, Bed, Bath, Maximize, Calendar, TrendingUp, Home, Ruler, Car, DollarSign } from "lucide-react";
+import { Building2, Bed, Bath, Maximize, Calendar, TrendingUp, Home, Ruler, Car, DollarSign, Camera, MapPin } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
 import { AnimatedNumber } from "./ui/AnimatedNumber";
@@ -25,9 +25,18 @@ function StatItem({ icon, label, value }: { icon: React.ReactNode; label: string
   );
 }
 
+function getValueIndicator(estimatedValue: number, lastSoldPrice: number) {
+  const appreciation = ((estimatedValue - lastSoldPrice) / lastSoldPrice) * 100;
+  if (appreciation >= 15) return { label: "STRONG VALUE", color: "#00ff88", bg: "rgba(0,255,136,0.08)", border: "rgba(0,255,136,0.2)" };
+  if (appreciation >= 8) return { label: "GOOD VALUE", color: "#00ccff", bg: "rgba(0,204,255,0.08)", border: "rgba(0,204,255,0.2)" };
+  if (appreciation >= 0) return { label: "FAIR VALUE", color: "#ff8800", bg: "rgba(255,136,0,0.08)", border: "rgba(255,136,0,0.2)" };
+  return { label: "BELOW PURCHASE", color: "#ff4444", bg: "rgba(255,68,68,0.08)", border: "rgba(255,68,68,0.2)" };
+}
+
 export const PropertyDetails = memo(function PropertyDetails({ data, visible, loaded }: PropertyDetailsProps) {
   const appreciation = ((data.estimatedValue - data.lastSoldPrice) / data.lastSoldPrice) * 100;
   const pricePerSqft = Math.round(data.estimatedValue / data.sqft);
+  const indicator = getValueIndicator(data.estimatedValue, data.lastSoldPrice);
 
   return (
     <PanelCard
@@ -45,11 +54,40 @@ export const PropertyDetails = memo(function PropertyDetails({ data, visible, lo
         <ShimmerLoader lines={7} />
       ) : (
         <div className="space-y-3">
-          <div>
-            <div className="text-base font-semibold text-white leading-tight">{data.address}</div>
-            <div className="text-sm text-zinc-500 mt-0.5">
-              {data.city}, {data.state} {data.zip}
+          {/* Property Image Placeholder */}
+          <div className="property-image-hero">
+            <div className="property-image-gradient" />
+            <div className="property-image-content">
+              <Building2 size={28} className="text-zinc-600" />
+              <span className="flex items-center gap-1 text-[9px] text-zinc-600 font-mono mt-1">
+                <Camera size={9} /> Street View
+              </span>
             </div>
+            <div className="property-image-overlay">
+              <div className="flex items-center gap-1.5">
+                <MapPin size={10} className="text-accent" />
+                <span className="text-[10px] text-white font-mono">{data.address}</span>
+              </div>
+              <span className="text-[9px] text-zinc-400 font-mono">
+                {data.city}, {data.state} {data.zip}
+              </span>
+            </div>
+          </div>
+
+          {/* Value Indicator Badge */}
+          <div
+            className="value-indicator"
+            style={{ background: indicator.bg, borderColor: indicator.border }}
+          >
+            <div className="flex items-center gap-2">
+              <div className="value-indicator-dot" style={{ background: indicator.color, boxShadow: `0 0 6px ${indicator.color}` }} />
+              <span className="text-[9px] font-mono font-bold tracking-wider" style={{ color: indicator.color }}>
+                {indicator.label}
+              </span>
+            </div>
+            <span className="text-[9px] font-mono" style={{ color: indicator.color, opacity: 0.7 }}>
+              +{appreciation.toFixed(1)}% since purchase
+            </span>
           </div>
 
           <div className="flex items-baseline gap-3">
