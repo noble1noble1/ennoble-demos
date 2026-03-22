@@ -28,6 +28,9 @@ export const metadata: Metadata = {
     "cash flow analysis",
   ],
   authors: [{ name: "PropVision AI" }],
+  icons: {
+    icon: "/icon.svg",
+  },
   openGraph: {
     title: "PropVision — AI Property Investment Command Center",
     description:

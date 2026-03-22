@@ -53,6 +53,26 @@ npm install
 npm run dev    # http://localhost:3001
 ```
 
+## Deployment
+
+Each app is a standalone Next.js project. Deploy them as separate Vercel projects:
+
+**Option A — Vercel Dashboard:**
+1. Import the repo and set **Root Directory** to `propvision/` for PropVision
+2. Import the repo again and set **Root Directory** to `business-xray/` for BusinessXRay
+3. Both use default Next.js build settings — no extra configuration needed
+
+**Option B — Vercel CLI:**
+```bash
+# PropVision
+cd propvision && vercel --yes
+
+# BusinessXRay
+cd business-xray && vercel --yes
+```
+
+Both apps build with `next build` and require no environment variables for the demo.
+
 ## Design System
 
 Both apps share a consistent dark theme with:
