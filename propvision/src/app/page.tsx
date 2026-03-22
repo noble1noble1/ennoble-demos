@@ -362,7 +362,7 @@ export default function Home() {
       </main>
 
       {/* Footer */}
-      <footer className="app-footer relative z-10">
+      <footer className="app-footer relative z-10" role="contentinfo">
         Powered by <span>Exa Neural Search</span> &bull;{" "}
         <span>Claude AI</span> &bull; <span>RentCast</span>
       </footer>
