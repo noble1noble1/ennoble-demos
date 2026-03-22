@@ -95,6 +95,7 @@ function FeedItem({ item, index }: { item: IntelItem; index: number }) {
 export function IntelligenceFeed({ data, visible, loaded }: IntelligenceFeedProps) {
   const [feedItems, setFeedItems] = useState<IntelItem[]>([]);
   const [scanLine, setScanLine] = useState(0);
+  const [newIntelCount, setNewIntelCount] = useState(0);
 
   const bullishCount = data.filter(d => d.sentiment === "bullish").length;
   const bearishCount = data.filter(d => d.sentiment === "bearish").length;
@@ -105,9 +106,14 @@ export function IntelligenceFeed({ data, visible, loaded }: IntelligenceFeedProp
       const interval = setInterval(() => {
         setScanLine((p) => (p + 1) % 100);
       }, 50);
-      return () => clearInterval(interval);
+      // Simulate new intel arriving after initial load
+      const newIntelTimer = setTimeout(() => {
+        setNewIntelCount(3);
+      }, 8000);
+      return () => { clearInterval(interval); clearTimeout(newIntelTimer); };
     } else {
       setFeedItems([]);
+      setNewIntelCount(0);
     }
   }, [loaded, data]);
 
@@ -120,6 +126,12 @@ export function IntelligenceFeed({ data, visible, loaded }: IntelligenceFeedProp
       headerRight={
         loaded ? (
           <div className="flex items-center gap-2">
+            {newIntelCount > 0 && (
+              <span className="intel-new-badge">
+                <span className="intel-new-dot" />
+                {newIntelCount} new
+              </span>
+            )}
             <span className="intel-live-badge">
               <span className="intel-live-dot" />
               LIVE
