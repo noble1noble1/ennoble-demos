@@ -968,6 +968,43 @@ body {
   animation: pulse-dot 1.5s ease-in-out infinite;
 }
 
+/* ========== SCENARIO TOGGLE ========== */
+.scenario-toggle {
+  display: flex;
+  gap: 4px;
+  margin-bottom: 12px;
+  padding: 3px;
+  background: rgba(255,255,255,0.02);
+  border-radius: 8px;
+  border: 1px solid rgba(255,255,255,0.04);
+}
+
+.scenario-btn {
+  flex: 1;
+  font-size: 10px;
+  font-family: var(--font-mono, monospace);
+  font-weight: 600;
+  letter-spacing: 0.04em;
+  padding: 6px 8px;
+  border-radius: 6px;
+  border: 1px solid transparent;
+  background: transparent;
+  color: #666;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.scenario-btn:hover {
+  color: #aaa;
+  background: rgba(255,255,255,0.03);
+}
+
+.scenario-btn-active {
+  background: rgba(255,255,255,0.04) !important;
+  border-color: currentColor !important;
+  box-shadow: 0 0 8px rgba(0,255,136,0.05);
+}
+
 /* ========== INVESTMENT BRIEF ========== */
 .brief-container {
   max-height: 400px;
