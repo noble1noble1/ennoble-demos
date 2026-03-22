@@ -11,6 +11,14 @@ interface InvestmentBriefProps {
   loaded: boolean;
 }
 
+function parseTable(lines: string[]): { headers: string[]; rows: string[][] } {
+  const headers = lines[0].split("|").map((h) => h.trim()).filter(Boolean);
+  const rows = lines.slice(2).map((line) =>
+    line.split("|").map((c) => c.trim()).filter(Boolean)
+  );
+  return { headers, rows };
+}
+
 export function InvestmentBrief({ content, visible, loaded }: InvestmentBriefProps) {
   const [displayedText, setDisplayedText] = useState("");
   const [isTyping, setIsTyping] = useState(false);
@@ -25,7 +33,7 @@ export function InvestmentBrief({ content, visible, loaded }: InvestmentBriefPro
 
     setIsTyping(true);
     let i = 0;
-    const chunkSize = 3;
+    const chunkSize = 4;
 
     const interval = setInterval(() => {
       if (i < content.length) {
@@ -33,7 +41,6 @@ export function InvestmentBrief({ content, visible, loaded }: InvestmentBriefPro
         setDisplayedText(content.slice(0, end));
         i = end;
 
-        // Auto-scroll
         if (containerRef.current) {
           containerRef.current.scrollTop = containerRef.current.scrollHeight;
         }
@@ -41,69 +48,104 @@ export function InvestmentBrief({ content, visible, loaded }: InvestmentBriefPro
         setIsTyping(false);
         clearInterval(interval);
       }
-    }, 12);
+    }, 10);
 
     return () => clearInterval(interval);
   }, [loaded, content]);
 
-  // Simple markdown-like rendering
   function renderText(text: string) {
     const lines = text.split("\n");
-    return lines.map((line, idx) => {
+    const elements: React.ReactNode[] = [];
+    let i = 0;
+
+    while (i < lines.length) {
+      const line = lines[i];
+
+      // Detect table blocks
+      if (line.startsWith("| ") && i + 2 < lines.length && lines[i + 1]?.startsWith("|--")) {
+        const tableLines: string[] = [];
+        while (i < lines.length && lines[i].startsWith("|")) {
+          tableLines.push(lines[i]);
+          i++;
+        }
+        const { headers, rows } = parseTable(tableLines);
+        elements.push(
+          <div key={`table-${i}`} className="brief-table-wrap">
+            <table className="brief-table">
+              <thead>
+                <tr>
+                  {headers.map((h, hi) => (
+                    <th key={hi}>{h}</th>
+                  ))}
+                </tr>
+              </thead>
+              <tbody>
+                {rows.map((row, ri) => (
+                  <tr key={ri}>
+                    {row.map((cell, ci) => (
+                      <td key={ci} className={ci > 0 ? "font-mono" : ""}>
+                        {cell}
+                      </td>
+                    ))}
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        );
+        continue;
+      }
+
       if (line.startsWith("## ")) {
-        return (
-          <h3 key={idx} className="text-accent font-bold text-sm mt-4 mb-2 font-mono">
+        elements.push(
+          <h3 key={i} className="brief-heading">
             {line.replace("## ", "")}
           </h3>
         );
-      }
-      if (line.startsWith("| ")) {
-        return (
-          <div key={idx} className="text-[11px] text-zinc-400 font-mono whitespace-pre">
-            {line}
-          </div>
-        );
-      }
-      if (line.startsWith("**") && line.endsWith("**")) {
-        return (
-          <p key={idx} className="text-xs text-white font-semibold mt-2">
+      } else if (line.startsWith("**") && line.endsWith("**")) {
+        elements.push(
+          <p key={i} className="brief-bold">
             {line.replace(/\*\*/g, "")}
           </p>
         );
-      }
-      if (line.startsWith("- ")) {
-        return (
-          <div key={idx} className="text-xs text-zinc-400 pl-3 py-0.5">
-            {line}
+      } else if (line.startsWith("- ")) {
+        elements.push(
+          <div key={i} className="brief-list-item">
+            <span className="brief-bullet" />
+            {renderInline(line.slice(2))}
           </div>
         );
-      }
-      if (line.startsWith("*")) {
-        return (
-          <p key={idx} className="text-[10px] text-zinc-600 italic mt-2">
+      } else if (line.startsWith("*") && !line.startsWith("**")) {
+        elements.push(
+          <p key={i} className="brief-footnote">
             {line.replace(/\*/g, "")}
           </p>
         );
+      } else if (line.trim() === "") {
+        elements.push(<div key={i} className="h-2" />);
+      } else {
+        elements.push(
+          <p key={i} className="brief-text">
+            {renderInline(line)}
+          </p>
+        );
       }
-      if (line.trim() === "") {
-        return <div key={idx} className="h-1" />;
+      i++;
+    }
+    return elements;
+  }
+
+  function renderInline(text: string) {
+    const parts = text.split(/(\*\*[^*]+\*\*)/);
+    return parts.map((part, pi) => {
+      if (part.startsWith("**") && part.endsWith("**")) {
+        return (
+          <span key={pi} className="text-white font-semibold">
+            {part.replace(/\*\*/g, "")}
+          </span>
+        );
       }
-      // Handle inline bold
-      const parts = line.split(/(\*\*[^*]+\*\*)/);
-      return (
-        <p key={idx} className="text-xs text-zinc-400 leading-relaxed">
-          {parts.map((part, pi) => {
-            if (part.startsWith("**") && part.endsWith("**")) {
-              return (
-                <span key={pi} className="text-white font-semibold">
-                  {part.replace(/\*\*/g, "")}
-                </span>
-              );
-            }
-            return part;
-          })}
-        </p>
-      );
+      return part;
     });
   }
 

@@ -1,7 +1,7 @@
 "use client";
 
-import { useEffect, useRef } from "react";
-import { MapPin } from "lucide-react";
+import { useEffect, useRef, useState } from "react";
+import { MapPin, Navigation } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
 import { PropertyData, ComparableProperty } from "@/lib/mockData";
@@ -13,12 +13,71 @@ interface MapViewProps {
   loaded: boolean;
 }
 
+function StaticMapPlaceholder({ property, comparables }: { property: PropertyData; comparables: ComparableProperty[] }) {
+  const [lat, lng] = [property.coordinates[1], property.coordinates[0]];
+
+  return (
+    <div className="map-placeholder">
+      {/* Grid overlay */}
+      <div className="map-grid" />
+
+      {/* Radial gradient glow */}
+      <div className="map-glow" />
+
+      {/* Coordinate lines */}
+      <div className="map-crosshair-h" />
+      <div className="map-crosshair-v" />
+
+      {/* Range rings */}
+      <div className="map-range-ring ring-1" />
+      <div className="map-range-ring ring-2" />
+      <div className="map-range-ring ring-3" />
+
+      {/* Comparable dots */}
+      {comparables.map((comp, i) => {
+        const dx = (comp.coordinates[0] - lng) * 8000;
+        const dy = (lat - comp.coordinates[1]) * 8000;
+        return (
+          <div
+            key={i}
+            className="map-comp-dot"
+            style={{
+              left: `calc(50% + ${dx}px)`,
+              top: `calc(50% + ${dy}px)`,
+              animationDelay: `${i * 200}ms`,
+            }}
+          />
+        );
+      })}
+
+      {/* Center marker */}
+      <div className="map-center-marker">
+        <div className="map-center-pulse" />
+        <div className="map-center-dot" />
+      </div>
+
+      {/* Coordinate label */}
+      <div className="map-coord-label top-left">
+        <span>{(lat + 0.003).toFixed(4)}°N</span>
+      </div>
+      <div className="map-coord-label bottom-right">
+        <span>{(lng - 0.003).toFixed(4)}°W</span>
+      </div>
+      <div className="map-coord-label center-label">
+        <Navigation size={10} className="inline mr-1" />
+        {lat.toFixed(4)}°N, {Math.abs(lng).toFixed(4)}°W
+      </div>
+    </div>
+  );
+}
+
 export function MapView({ property, comparables, visible, loaded }: MapViewProps) {
   const mapContainer = useRef<HTMLDivElement>(null);
   const mapRef = useRef<mapboxgl.Map | null>(null);
+  const [mapFailed, setMapFailed] = useState(false);
 
   useEffect(() => {
-    if (!loaded || !mapContainer.current || mapRef.current) return;
+    if (!loaded || !mapContainer.current || mapRef.current || mapFailed) return;
 
     let map: mapboxgl.Map | null = null;
 
@@ -37,16 +96,20 @@ export function MapView({ property, comparables, visible, loaded }: MapViewProps
           zoom: 15,
         });
 
+        map.on("error", () => {
+          setMapFailed(true);
+          map?.remove();
+          mapRef.current = null;
+        });
+
         mapRef.current = map;
 
-        // Main property marker
         const mainEl = document.createElement("div");
         mainEl.className = "main-marker";
         new mapboxgl.Marker({ element: mainEl })
           .setLngLat(property.coordinates)
           .addTo(map);
 
-        // Comparable markers
         comparables.forEach((comp) => {
           const compEl = document.createElement("div");
           compEl.className = "comp-marker";
@@ -55,8 +118,7 @@ export function MapView({ property, comparables, visible, loaded }: MapViewProps
             .addTo(map!);
         });
       } catch {
-        // Token is placeholder — map container renders but tiles won't load
-        // Show a fallback dark container
+        setMapFailed(true);
       }
     }
 
@@ -68,7 +130,7 @@ export function MapView({ property, comparables, visible, loaded }: MapViewProps
         mapRef.current = null;
       }
     };
-  }, [loaded, property.coordinates, comparables]);
+  }, [loaded, property.coordinates, comparables, mapFailed]);
 
   return (
     <PanelCard
@@ -89,6 +151,8 @@ export function MapView({ property, comparables, visible, loaded }: MapViewProps
         <div className="h-[280px] flex items-center justify-center">
           <ShimmerLoader lines={1} className="w-full h-full" />
         </div>
+      ) : mapFailed ? (
+        <StaticMapPlaceholder property={property} comparables={comparables} />
       ) : (
         <div className="relative">
           <div ref={mapContainer} className="map-container" />

@@ -24,6 +24,9 @@ export interface ComparableProperty {
   distance: string;
   coordinates: [number, number];
   image: string;
+  soldDate?: string;
+  daysOnMarket?: number;
+  condition?: string;
 }
 
 export interface RentEstimate {
@@ -84,6 +87,9 @@ export const mockComparables: ComparableProperty[] = [
     distance: "0.1 mi",
     coordinates: [-73.9862, 40.7478],
     image: "/placeholder-1.jpg",
+    soldDate: "Jan 2025",
+    daysOnMarket: 18,
+    condition: "Excellent",
   },
   {
     address: "15 W 34th St, Unit 8A",
@@ -94,6 +100,9 @@ export const mockComparables: ComparableProperty[] = [
     distance: "0.2 mi",
     coordinates: [-73.9849, 40.7497],
     image: "/placeholder-2.jpg",
+    soldDate: "Dec 2024",
+    daysOnMarket: 34,
+    condition: "Good",
   },
   {
     address: "11 W 30th St, Apt 5C",
@@ -104,6 +113,9 @@ export const mockComparables: ComparableProperty[] = [
     distance: "0.3 mi",
     coordinates: [-73.9878, 40.7462],
     image: "/placeholder-3.jpg",
+    soldDate: "Feb 2025",
+    daysOnMarket: 8,
+    condition: "Excellent",
   },
   {
     address: "400 Park Ave S, Unit 22D",
@@ -114,6 +126,9 @@ export const mockComparables: ComparableProperty[] = [
     distance: "0.4 mi",
     coordinates: [-73.9832, 40.7445],
     image: "/placeholder-4.jpg",
+    soldDate: "Nov 2024",
+    daysOnMarket: 45,
+    condition: "Good",
   },
   {
     address: "225 W 34th St, Apt 3F",
@@ -124,6 +139,9 @@ export const mockComparables: ComparableProperty[] = [
     distance: "0.5 mi",
     coordinates: [-73.9905, 40.7510],
     image: "/placeholder-5.jpg",
+    soldDate: "Oct 2024",
+    daysOnMarket: 62,
+    condition: "Fair",
   },
   {
     address: "45 W 36th St, Unit 10A",
@@ -134,6 +152,9 @@ export const mockComparables: ComparableProperty[] = [
     distance: "0.3 mi",
     coordinates: [-73.9856, 40.7510],
     image: "/placeholder-6.jpg",
+    soldDate: "Jan 2025",
+    daysOnMarket: 12,
+    condition: "Excellent",
   },
 ];
 
