@@ -146,6 +146,7 @@ export default function Home() {
               <SearchBar
                 onSearch={handleSearch}
                 isSearching={isSearching && sourceCount < 14}
+                autoFocus
               />
             </div>
 

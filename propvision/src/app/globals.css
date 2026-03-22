@@ -215,9 +215,36 @@ body {
 }
 
 .search-bar:focus-within {
-  border-color: var(--accent);
+  border-color: transparent;
   box-shadow: 0 0 0 3px rgba(0, 255, 136, 0.08), 0 0 20px rgba(0, 255, 136, 0.05);
   background: rgba(17, 17, 17, 0.95);
+}
+
+/* Gradient border animation on focus */
+.search-bar-focused {
+  position: relative;
+  border-color: transparent !important;
+}
+
+.search-bar-focused::before {
+  content: "";
+  position: absolute;
+  inset: -1px;
+  border-radius: 13px;
+  padding: 1px;
+  background: linear-gradient(135deg, var(--accent), #00ccff, var(--accent), #00ffaa);
+  background-size: 300% 300%;
+  animation: gradient-border-spin 3s ease infinite;
+  -webkit-mask: linear-gradient(#fff 0 0) content-box, linear-gradient(#fff 0 0);
+  -webkit-mask-composite: xor;
+  mask-composite: exclude;
+  pointer-events: none;
+  z-index: 1;
+}
+
+@keyframes gradient-border-spin {
+  0%, 100% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
 }
 
 .search-icon {
