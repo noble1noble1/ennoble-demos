@@ -72,6 +72,7 @@ export interface IntelItem {
   timestamp: string;
   relevance: number;
   category: "zoning" | "infrastructure" | "market" | "schools" | "permits" | "employment" | "safety" | "amenities";
+  sentiment: "bullish" | "bearish" | "neutral";
 }
 
 export const mockProperty: PropertyData = {
@@ -274,6 +275,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "2 min ago",
     relevance: 94,
     category: "permits",
+    sentiment: "bearish",
   },
   {
     id: 2,
@@ -282,6 +284,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "5 min ago",
     relevance: 91,
     category: "infrastructure",
+    sentiment: "bullish",
   },
   {
     id: 3,
@@ -290,6 +293,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "8 min ago",
     relevance: 87,
     category: "safety",
+    sentiment: "bullish",
   },
   {
     id: 4,
@@ -298,6 +302,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "12 min ago",
     relevance: 85,
     category: "employment",
+    sentiment: "bullish",
   },
   {
     id: 5,
@@ -306,6 +311,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "15 min ago",
     relevance: 82,
     category: "market",
+    sentiment: "bullish",
   },
   {
     id: 6,
@@ -314,6 +320,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "18 min ago",
     relevance: 79,
     category: "zoning",
+    sentiment: "bearish",
   },
   {
     id: 7,
@@ -322,6 +329,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "20 min ago",
     relevance: 78,
     category: "schools",
+    sentiment: "bullish",
   },
   {
     id: 8,
@@ -330,6 +338,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "22 min ago",
     relevance: 75,
     category: "amenities",
+    sentiment: "bullish",
   },
   {
     id: 9,
@@ -338,6 +347,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "24 min ago",
     relevance: 74,
     category: "permits",
+    sentiment: "bearish",
   },
   {
     id: 10,
@@ -346,6 +356,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "25 min ago",
     relevance: 72,
     category: "market",
+    sentiment: "neutral",
   },
   {
     id: 11,
@@ -354,6 +365,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "28 min ago",
     relevance: 70,
     category: "zoning",
+    sentiment: "bearish",
   },
   {
     id: 12,
@@ -362,6 +374,7 @@ export const mockIntelItems: IntelItem[] = [
     timestamp: "32 min ago",
     relevance: 68,
     category: "infrastructure",
+    sentiment: "bullish",
   },
 ];
 

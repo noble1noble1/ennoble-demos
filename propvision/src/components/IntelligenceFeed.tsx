@@ -1,7 +1,7 @@
 "use client";
 
 import { useState, useEffect } from "react";
-import { Radar, ExternalLink, AlertTriangle, TrendingUp, Building, Shield, MapPin, GraduationCap, Hammer, Briefcase, ShoppingBag } from "lucide-react";
+import { Radar, ExternalLink, AlertTriangle, TrendingUp, TrendingDown, Building, Shield, MapPin, GraduationCap, Hammer, Briefcase, ShoppingBag, Minus } from "lucide-react";
 import { PanelCard } from "./ui/PanelCard";
 import { ShimmerLoader } from "./ui/ShimmerLoader";
 import { IntelItem } from "@/lib/mockData";
@@ -18,6 +18,12 @@ function getRelevanceColor(r: number): string {
   if (r >= 70) return "#ff8800";
   return "#666";
 }
+
+const sentimentConfig = {
+  bullish: { label: "BULLISH", color: "#00ff88", bg: "rgba(0,255,136,0.08)", border: "rgba(0,255,136,0.2)", icon: TrendingUp },
+  bearish: { label: "BEARISH", color: "#ff4444", bg: "rgba(255,68,68,0.08)", border: "rgba(255,68,68,0.2)", icon: TrendingDown },
+  neutral: { label: "NEUTRAL", color: "#888", bg: "rgba(136,136,136,0.08)", border: "rgba(136,136,136,0.2)", icon: Minus },
+};
 
 function getCategoryIcon(category: string) {
   const iconMap: Record<string, React.ComponentType<{ size: number }>> = {
@@ -37,6 +43,8 @@ function getCategoryIcon(category: string) {
 function FeedItem({ item, index }: { item: IntelItem; index: number }) {
   const [show, setShow] = useState(false);
   const color = getRelevanceColor(item.relevance);
+  const sentiment = sentimentConfig[item.sentiment];
+  const SentimentIcon = sentiment.icon;
 
   useEffect(() => {
     const timer = setTimeout(() => setShow(true), index * 400);
@@ -46,7 +54,10 @@ function FeedItem({ item, index }: { item: IntelItem; index: number }) {
   if (!show) return null;
 
   return (
-    <div className="intel-item">
+    <div
+      className="intel-item"
+      style={{ borderLeft: `2px solid ${sentiment.color}20` }}
+    >
       <div className="flex items-start gap-3">
         {/* Relevance indicator */}
         <div className="intel-relevance-indicator">
@@ -66,6 +77,14 @@ function FeedItem({ item, index }: { item: IntelItem; index: number }) {
             <span className="intel-source-link">
               {item.source} <ExternalLink size={8} />
             </span>
+            {/* Sentiment badge */}
+            <span
+              className="intel-sentiment-badge"
+              style={{ color: sentiment.color, background: sentiment.bg, borderColor: sentiment.border }}
+            >
+              <SentimentIcon size={8} />
+              {sentiment.label}
+            </span>
           </div>
         </div>
       </div>
@@ -77,10 +96,12 @@ export function IntelligenceFeed({ data, visible, loaded }: IntelligenceFeedProp
   const [feedItems, setFeedItems] = useState<IntelItem[]>([]);
   const [scanLine, setScanLine] = useState(0);
 
+  const bullishCount = data.filter(d => d.sentiment === "bullish").length;
+  const bearishCount = data.filter(d => d.sentiment === "bearish").length;
+
   useEffect(() => {
     if (loaded) {
       setFeedItems(data);
-      // Animate scan line
       const interval = setInterval(() => {
         setScanLine((p) => (p + 1) % 100);
       }, 50);
@@ -112,6 +133,24 @@ export function IntelligenceFeed({ data, visible, loaded }: IntelligenceFeedProp
         <ShimmerLoader lines={6} />
       ) : (
         <div className="intel-feed-container">
+          {/* Sentiment Summary */}
+          <div className="intel-sentiment-summary">
+            <div className="intel-sentiment-count" style={{ color: "#00ff88" }}>
+              <TrendingUp size={10} />
+              <span className="font-mono text-[10px] font-bold">{bullishCount} Bullish</span>
+            </div>
+            <div className="intel-sentiment-count" style={{ color: "#ff4444" }}>
+              <TrendingDown size={10} />
+              <span className="font-mono text-[10px] font-bold">{bearishCount} Bearish</span>
+            </div>
+            <div className="intel-sentiment-bar">
+              <div
+                className="intel-sentiment-bar-fill"
+                style={{ width: `${(bullishCount / (bullishCount + bearishCount)) * 100}%` }}
+              />
+            </div>
+          </div>
+
           {/* Scan line effect */}
           <div className="intel-scan-overlay" style={{ top: `${scanLine}%` }} />
 
