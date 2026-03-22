@@ -286,6 +286,7 @@ export function InvestmentBrief({ content, visible, loaded }: InvestmentBriefPro
                 key={s.key}
                 role="tab"
                 aria-selected={scenario === s.key}
+                aria-label={`${s.label} scenario`}
                 className={`scenario-btn ${scenario === s.key ? "scenario-btn-active" : ""}`}
                 style={scenario === s.key ? { color: s.color, borderColor: s.color } : {}}
                 onClick={() => setScenario(s.key)}

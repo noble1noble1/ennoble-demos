@@ -40,16 +40,17 @@ function AnimatedNumber({ value, prefix = "", suffix = "", decimals = 0 }: { val
 
   return (
     <span className="font-mono">
-      {prefix}{display < 0 ? "-" : ""}{prefix === "$" ? "" : ""}{Math.abs(display).toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}{suffix}
+      {prefix}{display < 0 ? "-" : ""}{Math.abs(display).toLocaleString(undefined, { minimumFractionDigits: decimals, maximumFractionDigits: decimals })}{suffix}
     </span>
   );
 }
 
-function EditableInput({ value, onChange, label, prefix = "$" }: {
+function EditableInput({ value, onChange, label, prefix = "$", suffix = "" }: {
   value: number;
   onChange: (v: number) => void;
   label: string;
   prefix?: string;
+  suffix?: string;
 }) {
   const [editing, setEditing] = useState(false);
   const [text, setText] = useState(String(value));
@@ -75,8 +76,8 @@ function EditableInput({ value, onChange, label, prefix = "$" }: {
           aria-label={`Edit ${label}`}
         />
       ) : (
-        <button className="cashflow-value-btn" onClick={() => setEditing(true)} aria-label={`Edit ${label}: ${prefix}${value.toLocaleString()}`}>
-          {prefix}{value.toLocaleString()}
+        <button className="cashflow-value-btn" onClick={() => setEditing(true)} aria-label={`Edit ${label}: ${prefix}${value.toLocaleString()}${suffix}`}>
+          {prefix}{value.toLocaleString()}{suffix}
         </button>
       )}
     </div>
@@ -206,7 +207,7 @@ export function CashFlowCalculator({ visible, loaded, propertyValue, monthlyRent
               </span>
             </div>
             <EditableInput label="Monthly Rent" value={rent} onChange={setRent} />
-            <EditableInput label="Vacancy Rate" value={vacancy} onChange={setVacancy} prefix="" />
+            <EditableInput label="Vacancy Rate" value={vacancy} onChange={setVacancy} prefix="" suffix="%" />
           </div>
 
           {/* Expenses Section */}

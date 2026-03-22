@@ -37,8 +37,9 @@ export class ErrorBoundary extends Component<Props, State> {
           <button
             className="action-btn"
             onClick={() => this.setState({ hasError: false, error: undefined })}
+            aria-label="Retry loading"
           >
-            <RefreshCw size={12} />
+            <RefreshCw size={12} aria-hidden="true" />
             Retry
           </button>
         </div>
